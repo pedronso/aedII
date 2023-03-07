@@ -6,9 +6,20 @@ int main(int argc, char **argv)
 {
   bst_root root;
 
-  ini_bst(&root);
+  init_bst(&root);
 
-  printf("%d",root->info);
+  printf("hello\n");
+
+  root = bst_insert(root, 10);
+  root = bst_insert(root, 15);
+  root = bst_insert(root, 30);
+  root = bst_insert(root, 5);
+  root = bst_insert(root, 3);
+  root = bst_insert(root, 8);
+  
+
+  bst_in(root);
+
   /*
   int vazia = estaVazia_ArvBin(raiz);
   int tamanho = altura_ArvBin(raiz);
