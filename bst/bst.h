@@ -15,19 +15,20 @@ void init_bst(bst_root *root);
 bst_root bst_insert(bst_root root, int data);
 
 //remove
-int bst_remove(bst_root *root, int data);
-struct bst_node* bst_remove_this(struct bst_node* this_node);
+bst_root bst_remove(bst_root root, int data);
+int bigger_left(bst_root root);
 
 //free
-void free_node(bst_node *node);
+void free_root(bst_root *root);
 
 //query
-int bst_search(bst_root *root, int data);
+bst_root bst_search(bst_root root, int data);
 
 //bst info
-int bst_qtd(bst_root *root);
-int bst_height(bst_root *root);
-int bst_empty(bst_root *root);
+int bst_qtd(bst_root root);
+int bst_height(bst_root root);
+int max(int a, int b);
+int bst_empty(bst_root root);
 
 //print
 void bst_pre(bst_root root);
