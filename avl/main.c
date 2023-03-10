@@ -2,23 +2,24 @@
 #include <stdio.h>
 #include "avl.h"
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv){
   avl_root root;
+
+  int growt = 0;
 
   init_avl(&root);
 
   printf("hello\n");
 
-  root = avl_insert(root, 10);
-  root = avl_insert(root, 15);
-  root = avl_insert(root, 30);
-  root = avl_insert(root, 5);
-  root = avl_insert(root, 3);
-  root = avl_insert(root, 8);
-  root = avl_insert(root, 1);
-  root = avl_insert(root, 2);
-  root = avl_insert(root, 4);
+  root = avl_insert(root, 10, &growt);
+  root = avl_insert(root, 15, &growt);
+  root = avl_insert(root, 30, &growt);
+  root = avl_insert(root, 5, &growt);
+  root = avl_insert(root, 3, &growt);
+  root = avl_insert(root, 8, &growt);
+  // root = avl_insert(root, 1, &growt);
+  // root = avl_insert(root, 2, &growt);
+  // root = avl_insert(root, 4, &growt);
 
   
   avl_pre(root);
@@ -37,7 +38,7 @@ int main(int argc, char **argv)
   printf("altura: %d\n", avl_height(root));
   printf("qtd: %d\n", avl_qtd(root));
   
-  
+  /*
   root = avl_remove(root, 5);
 
   avl_pos(root);
@@ -48,6 +49,6 @@ int main(int argc, char **argv)
 
   root = avl_remove(root, 3);
 
-  avl_pos(root);
+  avl_pos(root);*/
 
 }

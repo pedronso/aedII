@@ -6,18 +6,52 @@ void init_avl(avl_root *root){
   *root = NULL;
 }
 
-avl_root avl_insert(avl_root root, int data){
+avl_root avl_insert(avl_root root, int data, int *grown){
   if(root == NULL){
     avl_root new = (avl_root) malloc(sizeof(avl_node));
 		new->data = data;
 		new->left = NULL;
 		new->right = NULL;
+        new->bf = 0;
+        *grown = 1;
 		return new;
   }else{
     if(data < root->data) {
-      root->left = avl_insert(root->left, data);
+      root->left = avl_insert(root->left, data, grown);
+      if(*grown){
+        switch(root->bf){
+          case 0:
+            root->bf = -1;
+            *grown = 1;
+            break;
+          case 1:
+            root->bf = 0;
+            *grown = 0;
+            break;
+          case -1:
+            *grown = 0;
+            return rotate(root);
+            break;
+        }
+      }
     }else {
-      root->right = avl_insert(root->right, data);
+      root->right = avl_insert(root->right, data, grown);
+      if(*grown){
+        switch(root->bf){
+          case 0:
+            root->bf = 1;
+            *grown = 1;
+            break;
+          case -1:
+            root->bf = 0;
+            *grown = 0;
+            break;
+          case 1:
+            *grown = 0;
+            return rotate(root);
+            break;
+        }
+      }
     }
     return root;
   } 
@@ -48,6 +82,67 @@ avl_root avl_remove(avl_root root, int data){
   
   return root;
   
+}
+
+avl_root rotate(avl_root root){
+    if(root->bf>0){
+      switch(root->right->bf){
+        case 0:
+          break;
+        case 1:
+          return left_rotation(root);
+          break;
+        case -1:
+          return double_left_rotation(root);
+      }
+    }else{
+      switch(root->left->bf){
+        case 0:
+          break;
+        case -1:
+          return right_rotation(root);
+          break;
+        case 1:
+          return double_right_rotation(root);
+      }
+    }
+    return root;
+}
+
+avl_root left_rotation(avl_root root){
+  avl_root temp = root;
+
+  root = root->right;
+  temp->right = root->left;
+  root->left = temp;
+
+  if(root->bf==1){
+    temp->bf=0;
+    root->bf=0;
+  }else{
+    temp->bf=1;
+    root->bf=-1;
+  }
+
+  return root;
+}
+
+avl_root right_rotation(avl_root root){
+  avl_root temp = root;
+
+  root = root->left;
+  temp->left = root->right;
+  root->right = temp;
+
+  return root;
+}
+
+avl_root double_left_rotation(avl_root root){
+  return (left_rotation(right_rotation(root->right)));
+}
+
+avl_root double_right_rotation(avl_root root){
+  return (right_rotation(left_rotation(root->left)));
 }
 
 int bigger_left(avl_root root) {
