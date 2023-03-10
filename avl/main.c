@@ -16,7 +16,15 @@ int main(int argc, char **argv){
   root = avl_insert(root, 30, &growt);
   root = avl_insert(root, 5, &growt);
   root = avl_insert(root, 3, &growt);
+  // avl_pre(root);
   root = avl_insert(root, 8, &growt);
+  root = avl_insert(root, 45, &growt);
+  root = avl_insert(root, 2, &growt);
+  root = avl_insert(root, 7, &growt);
+  root = avl_insert(root, 1, &growt);
+  root = avl_insert(root, 13, &growt);
+  root = avl_insert(root, 25, &growt);
+
   // root = avl_insert(root, 1, &growt);
   // root = avl_insert(root, 2, &growt);
   // root = avl_insert(root, 4, &growt);
