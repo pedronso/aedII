@@ -47,12 +47,16 @@ int main(int argc, char **argv){
   printf("altura: %d\n", avl_height(root));
   printf("qtd: %d\n", avl_qtd(root));
 
+  // avl_pre_new(root);
 
-  root = avl_remove(root, 25, &shrunk);
+  // root = avl_remove(root, 5, &shrunk);
   
-  avl_pre(root);
+  root = avl_remove_new(root, 15);
+  
   printf("\n");
-  
+  avl_pre_new(root);
+  printf("\n");
+
   /*
   root = avl_remove(root, 5);
 
