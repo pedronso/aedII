@@ -69,31 +69,85 @@ avl_root avl_insert(avl_root root, int data, int *grown){
   } 
 }
 
-avl_root avl_remove(avl_root root, int data){
+avl_root avl_remove(avl_root root, int data, int *shrink){
   if(root==NULL)
     return NULL;
   if(root->data==data){
+    printf("achou %d, root = %d, s = %d\n",data, root->data, *shrink);
     if(root->left==NULL){
       avl_root temp = root->right;
       free(root);
+      *shrink = 1;
+      printf("voltando para cima, valor retornado será %d\n",temp->data);
+      printf("folha %d removida\n",data);
       return temp;  
     }
     if(root->right==NULL){
       avl_root temp = root->left;
       free(root);
+      *shrink = 1;
+      printf("folha %d removida\n",data);
       return temp;  
     }
     root->data=bigger_left(root->left);
-    root->left=avl_remove(root->left,root->data);
+    root->left=avl_remove(root->left,root->data, shrink);
+    *shrink = 1;
+    printf("folha %d removida\n",data);
     return root;
   }
-  if (data<root->data)
-    root->left=avl_remove(root->left, data);
-  else
-    root->right=avl_remove(root->right, data);
-  
+  if (data<root->data){
+    printf("%d vai ser removido a esquerda de %d (%d)\n",data, root->data, root->left->data);
+    root->left=avl_remove(root->left, data, shrink);
+    printf("%d removido a esquerda de %d\n",data, root->data);
+    printf("valor a esquerda de %d: %d\n",root->data,root->right->data);
+    if(*shrink){
+        printf("%d diminuiu a esquerda de %d\n",root->left->data, root->data);
+        printf("fb de %d : %d \n",root->data, root->bf); 
+        switch(root->bf){
+          case 0:
+            root->bf = +1;
+            *shrink = 0;
+            printf("fb de %d virou : %d \n",root->data, root->bf); 
+            break;
+          case -1:
+            root->bf = 0;
+            *shrink = 1;
+            printf("fb de %d virou: %d \n",root->data, root->bf); 
+            break;
+          case 1:
+            *shrink = 0;
+            printf("vai rotar \n",root->data, root->bf); 
+            return rotate(root);
+        }
+    }
+  }
+  else{
+    printf("%d vai ser removido a direita de %d (%d)\n",data, root->data, root->right->data);
+    root->right=avl_remove(root->right, data, shrink);
+    printf("%d removido a direita de %d\n",data, root->data);
+    printf("valor a direita de %d: %d\n",root->data,root->right->data);
+    if(*shrink){
+        printf("%d diminuiu a direita de %d\n",root->right->data, root->data);
+        printf("fb de %d : %d \n",root->data, root->bf); 
+        switch(root->bf){
+          case 0:
+            root->bf = -1;
+            *shrink = 0;
+            printf("fb de %d virou : %d \n",root->data, root->bf); 
+            break;
+          case 1:
+            root->bf = 0;
+            *shrink = 1;
+            printf("fb de %d virou: %d \n",root->data, root->bf); 
+            break;
+          case -1:
+            *shrink = 0;
+            printf("vai rotar \n",root->data, root->bf); 
+            return rotate(root);
+        }
+    }
+  }
   return root;
-  
 }
 
 avl_root rotate(avl_root root){
@@ -114,6 +168,7 @@ avl_root rotate(avl_root root){
       printf("esquerda de %d (%d) fb: %d\n",root->data,root->left->data,root->left->bf);
       switch(root->left->bf){
         case 0:
+          return right_rotation(root);
           break;
         case -1:
           return right_rotation(root);

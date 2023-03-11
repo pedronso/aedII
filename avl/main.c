@@ -6,6 +6,7 @@ int main(int argc, char **argv){
   avl_root root;
 
   int growt = 0;
+  int shrunk = 0;
 
   init_avl(&root);
 
@@ -45,6 +46,12 @@ int main(int argc, char **argv){
 
   printf("altura: %d\n", avl_height(root));
   printf("qtd: %d\n", avl_qtd(root));
+
+
+  root = avl_remove(root, 25, &shrunk);
+  
+  avl_pre(root);
+  printf("\n");
   
   /*
   root = avl_remove(root, 5);
@@ -59,4 +66,5 @@ int main(int argc, char **argv){
 
   avl_pos(root);*/
 
+  return 0;
 }
