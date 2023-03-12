@@ -57,47 +57,6 @@ avl_root avl_insert(avl_root root, int data, int *grown){
   }
 }
 
-avl_root avl_remove_new(avl_root root, int data){
-  if (root == NULL)
-    return root;
-  if (data < root->data)
-    root->left = avl_remove_new(root->left, data);
-  else if (data > root->data)
-    root->right = avl_remove_new(root->right, data);
-  else{
-    if (root->left == NULL)
-    {
-      avl_root temp = root->right;
-      // free(root);
-      return temp;
-    }
-    if (root->right == NULL)
-    {
-      avl_root temp = root->left;
-      // free(root);
-      return temp;
-    }else{
-      avl_root temp = root;
-      temp->data = bigger_left(root->left);
-      root->data = temp->data;
-      root->left = avl_remove_new(root->left, temp->data);
-    }
-  }
-  if (root == NULL)
-    return root;
-  switch (root->bf){
-      case 0:
-        root->bf = +1;
-        break;
-      case -1:
-        root->bf = 0;
-        break;
-      case 1:
-        return rotate(root);
-      }
-  return root;
-}
-
 avl_root avl_remove(avl_root root, int data, int *shrink)
 {
   if (root == NULL)
@@ -107,79 +66,79 @@ avl_root avl_remove(avl_root root, int data, int *shrink)
     if (root->left == NULL)
     {
       avl_root temp = root->right;
-      // free(root);
+      free(root);
       *shrink = 1;
       return temp;
     }
     if (root->right == NULL)
     {
       avl_root temp = root->left;
-      // free(root);
+      free(root);
       *shrink = 1;
-      printf("folha %d removida\n", data);
       return temp;
     }
     root->data = bigger_left(root->left);
     root->left = avl_remove(root->left, root->data, shrink);
     *shrink = 1;
-    printf("folha %d removida\n", data);
-    return root;
-  }
-  if (data < root->data)
-  {
-    printf("%d vai ser removido a esquerda de %d (%d)\n", data, root->data, root->left->data);
-    root->left = avl_remove(root->left, data, shrink);
-    printf("%d removido a esquerda de %d\n", data, root->data);
-    printf("valor a esquerda de %d: %d\n", root->data, root->right->data);
+
     if (*shrink)
     {
-      printf("%d diminuiu a esquerda de %d\n", root->left->data, root->data);
-      printf("fb de %d : %d \n", root->data, root->bf);
       switch (root->bf)
       {
       case 0:
         root->bf = +1;
         *shrink = 0;
-        printf("fb de %d virou : %d \n", root->data, root->bf);
         break;
       case -1:
         root->bf = 0;
         *shrink = 1;
-        printf("fb de %d virou: %d \n", root->data, root->bf);
         break;
       case 1:
         *shrink = 0;
-        printf("vai rotar \n", root->data, root->bf);
+        return rotate(root);
+      }
+    }
+
+    return root;
+  }
+  if (data < root->data)
+  {
+    root->left = avl_remove(root->left, data, shrink);
+    if (*shrink)
+    {
+      switch (root->bf)
+      {
+      case 0:
+        root->bf = +1;
+        *shrink = 0;
+        break;
+      case -1:
+        root->bf = 0;
+        *shrink = 1;
+        break;
+      case 1:
+        *shrink = 0;
         return rotate(root);
       }
     }
   }
   else
   {
-    printf("%d vai ser removido a direita de %d (%d)\n", data, root->data, root->right->data);
     root->right = avl_remove(root->right, data, shrink);
-    printf("%d removido a direita de %d. s = %d\n", data, root->data, *shrink);
-    // printf("valor a direita de %d : %d \n",root->data,root->right->data);
-    printf("ssss\n");
     if (*shrink)
     {
-      printf("%d diminuiu a direita de %d\n", root->right->data, root->data);
-      printf("fb de %d : %d \n", root->data, root->bf);
       switch (root->bf)
       {
       case 0:
         root->bf = -1;
         *shrink = 0;
-        printf("fb de %d virou : %d \n", root->data, root->bf);
         break;
       case 1:
         root->bf = 0;
         *shrink = 1;
-        printf("fb de %d virou: %d \n", root->data, root->bf);
         break;
       case -1:
         *shrink = 0;
-        printf("vai rotar \n", root->data, root->bf);
         return rotate(root);
       }
     }
@@ -191,8 +150,6 @@ avl_root rotate(avl_root root)
 {
   if (root->bf > 0)
   {
-    printf("rotate bf > 0 para %d\n", root->data);
-    printf("direita de %d (%d) fb: %d\n", root->data, root->right->data, root->right->bf);
     switch (root->right->bf)
     {
     case 0:
@@ -206,8 +163,6 @@ avl_root rotate(avl_root root)
   }
   else
   {
-    printf("rotate bf < 0 para %d\n", root->data);
-    printf("esquerda de %d (%d) fb: %d\n", root->data, root->left->data, root->left->bf);
     switch (root->left->bf)
     {
     case 0:
@@ -231,21 +186,15 @@ avl_root left_rotation(avl_root root)
   temp->right = root->left;
   root->left = temp;
 
-  root->bf = avl_balance(root);
-  temp->bf = avl_balance(temp);
+  if(root->bf==1){
+    temp->bf=0;
+    root->bf=0;
 
-  // if(root->bf==1){
-  //   temp->bf=0;
-  //   root->bf=0;
-  //   printf("fb de %d : %d\n",root->data, root->bf);
+  }else{
+    temp->bf=1;
+    root->bf=-1;
+  }
 
-  // }else{
-  //   temp->bf=1;
-  //   root->bf=-1;
-  //   printf("teste\n");
-  // }
-
-  printf("rotacao esquerda de %d pra %d\n", temp->data, root->data);
   return root;
 }
 
@@ -257,33 +206,85 @@ avl_root right_rotation(avl_root root)
   temp->left = root->right;
   root->right = temp;
 
-  root->bf = avl_balance(root);
-  temp->bf = avl_balance(temp);
-
-  // if(root->bf==-1){
-  //     temp->bf=0;
-  //     root->bf=0;
-  //     printf("fb de %d : %d\n",root->data, root->bf);
-  //   }else{
-  //     printf("teste\n");
-  //     temp->bf=1;
-  //     root->bf=-1;
-  //   }
-  printf("rotacao direita de %d pra %d\n", temp->data, root->data);
+  if(root->bf==-1){
+      temp->bf=0;
+      root->bf=0;
+    }else{
+      temp->bf=1;
+      root->bf=-1;
+    }
 
   return root;
 }
 
 avl_root double_left_rotation(avl_root root)
 {
-  root->right = right_rotation(root->right);
-  return (left_rotation(root));
+  avl_root p = root, u, v, t1, t2, t3, t4;
+
+  u = p->right;
+  v = u->left;
+  t1 = p->left;
+  t2 = v->left;
+  t3 = v->right;
+  t4 = u->right;
+
+  p->right = v;
+  v->right = u;
+  u->left = t3;
+
+  v->left = p;
+  p->right = t2;
+
+  if (v->bf == -1) {
+      p->bf = 0;
+      u->bf = 1;
+      v->bf = 0;
+  } else if (v->bf == 0) {
+      p->bf = 0;
+      u->bf = 0;
+      v->bf = 0;
+  } else if (v->bf == 1) {
+      p->bf = -1;
+      u->bf = 0;
+      v->bf = 0;
+  }
+
+  return v;
 }
 
 avl_root double_right_rotation(avl_root root)
 {
-  root->left = left_rotation(root->left);
-  return (right_rotation(root));
+  avl_root p = root, u, v, t1, t2, t3, t4;
+
+  u = p->left;
+  v = u->right;
+  t1 = u->left;
+  t2 = v->left;
+  t3 = v->right;
+  t4 = p->right;
+
+  p->left = v;
+  v->left = u;
+  u->right = t2;
+
+  v->right = p;
+  p->left = t3;
+
+  if (v->bf == -1) {
+      p->bf = 1;
+      u->bf = 0;
+      v->bf = 0;
+  } else if (v->bf == 0) {
+      p->bf = 0;
+      u->bf = 0;
+      v->bf = 0;
+  } else if (v->bf == 1) {
+      p->bf = 0;
+      u->bf = -1;
+      v->bf = 0;
+  }
+
+  return v;
 }
 
 int bigger_left(avl_root root)
@@ -304,9 +305,7 @@ void free_root(avl_root *root)
     *root = NULL;
   }
   else
-  {
     return;
-  }
 }
 
 avl_root avl_search(avl_root root, int data)
@@ -357,29 +356,15 @@ void avl_pre(avl_root root)
 {
   if (root != NULL)
   {
-    printf("%d, fb:%d\n", root->data, root->bf);
-    avl_pre(root->left);
-    avl_pre(root->right);
-  }
-}
-
-void avl_pre_new(avl_root root)
-{
-  if (root != NULL)
-  {
     int l = 0, r = 0;
     if (root->left != NULL)
-    {
       l = root->left->data;
-    }
     if (root->right != NULL)
-    {
       r = root->right->data;
-    }
 
-    printf("%d, fb:%d, l:%d, r:%d\n", root->data, root->bf, l, r);
-    avl_pre_new(root->left);
-    avl_pre_new(root->right);
+    printf("%d, bf:%d, l:%d, r:%d\n", root->data, root->bf, l, r);
+    avl_pre(root->left);
+    avl_pre(root->right);
   }
 }
 
@@ -387,9 +372,16 @@ void avl_pos(avl_root root)
 {
   if (root != NULL)
   {
+    int l = 0, r = 0;
+    if (root->left != NULL)
+      l = root->left->data;
+    if (root->right != NULL)
+      r = root->right->data;
+
     avl_pos(root->left);
     avl_pos(root->right);
-    printf("%d\n", root->data);
+    printf("%d, bf:%d, l:%d, r:%d\n", root->data, root->bf, l, r);
+
   }
 }
 
@@ -397,8 +389,14 @@ void avl_in(avl_root root)
 {
   if (root != NULL)
   {
+    int l = 0, r = 0;
+    if (root->left != NULL)
+      l = root->left->data;
+    if (root->right != NULL)
+      r = root->right->data;
+
     avl_in(root->left);
-    printf("%d\n", root->data);
+    printf("%d, bf:%d, l:%d, r:%d\n", root->data, root->bf, l, r);
     avl_in(root->right);
   }
 }

@@ -7,68 +7,58 @@ int main(int argc, char **argv){
 
   int growt = 0;
   int shrunk = 0;
+    
+  int input;
 
   init_avl(&root);
 
-  printf("hello\n");
+  while (1) {
+    printf("1- Inserir elemento\n2- Remover elemento\n3- Consultar elemento\n4- Preorder\n5- Inorder\n6- Posorder\n0- Sair\n");
+    scanf("%d", &input);
 
-  root = avl_insert(root, 10, &growt);
-  root = avl_insert(root, 15, &growt);
-  root = avl_insert(root, 30, &growt);
-  root = avl_insert(root, 5, &growt);
-  root = avl_insert(root, 3, &growt);
-  // avl_pre(root);
-  root = avl_insert(root, 8, &growt);
-  root = avl_insert(root, 45, &growt);
-  root = avl_insert(root, 2, &growt);
-  root = avl_insert(root, 7, &growt);
-  root = avl_insert(root, 1, &growt);
-  root = avl_insert(root, 13, &growt);
-  root = avl_insert(root, 25, &growt);
-
-  // root = avl_insert(root, 1, &growt);
-  // root = avl_insert(root, 2, &growt);
-  // root = avl_insert(root, 4, &growt);
-
-  
-  avl_pre(root);
-  printf("\n");
-  avl_in(root);
-  printf("\n");
-  avl_pos(root);
-
-  avl_root query = avl_search(root, 15);
-
-  if(query==NULL)
-    printf("valor n existe\n");
-  else
-    printf("valor existe, %d\n", query->data);
-
-  printf("altura: %d\n", avl_height(root));
-  printf("qtd: %d\n", avl_qtd(root));
-
-  // avl_pre_new(root);
-
-  // root = avl_remove(root, 5, &shrunk);
-  
-  root = avl_remove_new(root, 15);
-  
-  printf("\n");
-  avl_pre_new(root);
-  printf("\n");
-
-  /*
-  root = avl_remove(root, 5);
-
-  avl_pos(root);
-
-  root = avl_remove(root, 4);
-
-  avl_pos(root);
-
-  root = avl_remove(root, 3);
-
-  avl_pos(root);*/
-
+    switch (input) {
+        int data;
+        case 1:
+            printf("Valor a ser inserido: ");
+            scanf("%d", &data);
+            root = avl_insert(root, data, &growt);
+            break;
+        case 2:
+            printf("Valor a ser removido: ");
+            scanf("%d", &data);
+            root = avl_remove(root, data, &shrunk);;
+            break;
+        case 3:
+            printf("Valor a ser consultado: ");
+            scanf("%d", &data);
+            avl_root query = avl_search(root, data);
+            if(query==NULL)
+                printf("Valor não existe\n");
+            else
+            printf("Valor existe, %d\n", query->data);
+            printf("\n");
+            break;
+        case 4:
+            avl_pre(root);
+            printf("Altura: %d\n", avl_height(root));
+            printf("Qtd: %d\n", avl_qtd(root));
+            printf("\n");
+            break;
+        case 5:
+            avl_in(root);
+            printf("altura: %d\n", avl_height(root));
+            printf("qtd: %d\n", avl_qtd(root));
+            printf("\n");
+            break;
+        case 6:
+            avl_pos(root);
+            printf("altura: %d\n", avl_height(root));
+            printf("qtd: %d\n", avl_qtd(root));
+            printf("\n");
+            break;
+        case 0:
+            exit(0);
+    }
+}
   return 0;
 }

@@ -8,7 +8,7 @@ int main(int argc, char **argv){
     init_avp(&root);
 
     while (1) {
-    printf("1- Inserir elemento\n2- Remover elemento\n3- Consultar elemento\n4- Preorder\n5- Inorder\n6- Posorder\n0- Sair.\n");
+    printf("1- Inserir elemento\n2- Remover elemento\n3- Consultar elemento\n4- Preorder\n5- Inorder\n6- Posorder\n0- Sair\n");
     scanf("%d", &input);
 
     switch (input) {
@@ -19,7 +19,6 @@ int main(int argc, char **argv){
             avp_insert(&root, data);
             break;
         case 2:
-            // printf("A ser implementado...\n");
             printf("Valor a ser removido: ");
             scanf("%d", &data);
             avp_remove(&root, data);
@@ -29,7 +28,7 @@ int main(int argc, char **argv){
             scanf("%d", &data);
             avp_root query = avp_search(root, data);
             if(query==NULL)
-                printf("valor n existe\n");
+                printf("Valor não existe\n");
             else
             printf("Valor existe, %d\n", query->data);
             printf("\n");
@@ -56,15 +55,5 @@ int main(int argc, char **argv){
             exit(0);
     }
 }
-
-    // avp_insert(&root, 10);
-    // avp_insert(&root, 15);
-    // avp_insert(&root, 30);
-    // avp_insert(&root, 12);
-    // avp_insert(&root, 9);
-    // avp_insert(&root, 11);
-    // avp_insert(&root, 3);
-    // avp_insert(&root, 24);
-
     return 0;
 }
