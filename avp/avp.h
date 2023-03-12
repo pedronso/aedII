@@ -24,7 +24,9 @@ avp_root brother(avp_root root);
 avp_root uncle(avp_root root);
 
 //remove
-avp_root avp_remove(avp_root root, int data);
+void avp_remove(avp_root * root, int data);
+void fixup_remove(avp_root *root, avp_root dblack);
+void remove_double_black(avp_root *root, avp_root node);
 int bigger_left(avp_root root);
 
 //rotation

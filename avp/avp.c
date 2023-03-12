@@ -2,8 +2,15 @@
 #include <stdlib.h>
 #include "avp.h"
 
+avp_root null_root;
+
 void init_avp(avp_root *root){
   *root = NULL;
+  null_root = (avp_root) malloc(sizeof(avp_node));
+	null_root->data = 0;
+  null_root->left = NULL;
+  null_root->right = NULL;
+	null_root->color = DBLACK;
 }
 
 void avp_insert(avp_root * root, int data){
@@ -102,94 +109,158 @@ enum color color(avp_root root){
         c = root->color;
     return c;
 }
-// avp_root avp_remove(avp_root root, int data, int *shrink)
-// {
-//   if (root == NULL)
-//     return NULL;
-//   if (root->data == data)
-//   {
-//     if (root->left == NULL)
-//     {
-//       avp_root temp = root->right;
-//       // free(root);
-//       *shrink = 1;
-//       return temp;
-//     }
-//     if (root->right == NULL)
-//     {
-//       avp_root temp = root->left;
-//       // free(root);
-//       *shrink = 1;
-//       printf("folha %d removida\n", data);
-//       return temp;
-//     }
-//     root->data = bigger_left(root->left);
-//     root->left = avp_remove(root->left, root->data, shrink);
-//     *shrink = 1;
-//     printf("folha %d removida\n", data);
-//     return root;
-//   }
-//   if (data < root->data)
-//   {
-//     printf("%d vai ser removido a esquerda de %d (%d)\n", data, root->data, root->left->data);
-//     root->left = avp_remove(root->left, data, shrink);
-//     printf("%d removido a esquerda de %d\n", data, root->data);
-//     printf("valor a esquerda de %d: %d\n", root->data, root->right->data);
-//     if (*shrink)
-//     {
-//       printf("%d diminuiu a esquerda de %d\n", root->left->data, root->data);
-//       printf("fb de %d : %d \n", root->data, root->bf);
-//       switch (root->bf)
-//       {
-//       case 0:
-//         root->bf = +1;
-//         *shrink = 0;
-//         printf("fb de %d virou : %d \n", root->data, root->bf);
-//         break;
-//       case -1:
-//         root->bf = 0;
-//         *shrink = 1;
-//         printf("fb de %d virou: %d \n", root->data, root->bf);
-//         break;
-//       case 1:
-//         *shrink = 0;
-//         printf("vai rotar \n", root->data, root->bf);
-//         return rotate(root);
-//       }
-//     }
-//   }
-//   else
-//   {
-//     printf("%d vai ser removido a direita de %d (%d)\n", data, root->data, root->right->data);
-//     root->right = avp_remove(root->right, data, shrink);
-//     printf("%d removido a direita de %d. s = %d\n", data, root->data, *shrink);
-//     // printf("valor a direita de %d : %d \n",root->data,root->right->data);
-//     printf("ssss\n");
-//     if (*shrink)
-//     {
-//       printf("%d diminuiu a direita de %d\n", root->right->data, root->data);
-//       printf("fb de %d : %d \n", root->data, root->bf);
-//       switch (root->bf)
-//       {
-//       case 0:
-//         root->bf = -1;
-//         *shrink = 0;
-//         printf("fb de %d virou : %d \n", root->data, root->bf);
-//         break;
-//       case 1:
-//         root->bf = 0;
-//         *shrink = 1;
-//         printf("fb de %d virou: %d \n", root->data, root->bf);
-//         break;
-//       case -1:
-//         *shrink = 0;
-//         printf("vai rotar \n", root->data, root->bf);
-//         return rotate(root);
-//       }
-//     }
-//   }
-//   return root;
-// }
+void avp_remove(avp_root *root, int data)
+{
+  avp_root temp = *root;
+
+	while (temp != NULL) {
+		if (data == temp->data) {
+      if (temp->left != NULL && temp->right != NULL) {
+    		temp->data = bigger_left(temp->left);
+	    	avp_remove(&(temp->left),temp->data);
+        printf("%d removido!\n",data);
+        break;
+      }
+
+			if (temp->left == NULL && temp->right != NULL) {
+        avp_root right = temp->right;
+        temp->data = right->data;
+        temp->right = NULL;
+        free(right);
+        printf("%d removido!\n",data);
+				break;
+			}
+
+			if (temp->left != NULL && temp->right == NULL) {
+				avp_root left = temp->left;
+        temp->data = left->data;
+        temp->left = NULL;
+        free(left);
+        printf("%d removido!\n",data);
+        break;
+			}
+
+			if (temp->left == NULL && temp->right == NULL) {				
+				if (is_root(temp)) {
+					*root = NULL;
+          free(temp);
+          printf("%d removido!\n",data);
+					break;
+				}
+
+				if (temp->color == RED) {
+					if (is_left(temp))
+					  temp->parent->left = NULL;
+          else
+					  temp->parent->right = NULL;
+          free(temp);
+          printf("%d removido!\n",data);
+					break;
+				} else {
+          null_root->parent = temp->parent;
+          if (is_left(temp))
+            temp->parent->left = null_root;
+          else
+            temp->parent->right = null_root;
+          free(temp);
+          printf("%d removido!\n",data);
+          fixup_remove(root, null_root);
+          break;
+				}
+			}
+		}else{
+      if(data<temp->data)
+        temp = temp->left;
+      else
+          temp = temp->right;
+    }	
+	}
+}
+
+void fixup_remove(avp_root *root, avp_root dblack){
+
+	if(is_root(dblack)) {
+    remove_double_black(root, dblack);
+		return;
+	}
+
+	if(color(dblack->parent) == BLACK && color(brother(dblack)) == RED && color(brother(dblack)->right) == BLACK && color(brother(dblack)->left) == BLACK) {
+    if(is_left(dblack))
+        left_rotation(root, dblack->parent);
+    else
+        right_rotation(root, dblack->parent);	
+    dblack->parent->parent->color = BLACK;
+    dblack->parent->color = RED;
+    fixup_remove(root, dblack);
+    return;
+	}
+
+  if(color(dblack->parent) == BLACK && color(brother(dblack)) == BLACK && color(brother(dblack)->right) == BLACK && color(brother(dblack)->left) == BLACK) {
+    avp_root temp = dblack->parent;
+    brother(dblack)->color = RED;
+    temp->color = DBLACK;
+    remove_double_black(root, dblack);
+    fixup_remove(root, temp);
+    return;
+  }	
+
+	if(color(dblack->parent) == RED && color(brother(dblack)) == BLACK && color(brother(dblack)->right) == BLACK && color(brother(dblack)->left) == BLACK) {	
+    dblack->parent->color = BLACK;
+    brother(dblack)->color = RED;
+    remove_double_black(root, dblack);
+		return;
+	}
+
+	if(color(brother(dblack)) == BLACK && color(brother(dblack)->right) == BLACK && color(brother(dblack)->left) == RED && !is_left(brother(dblack))) {	
+    right_rotation(root, brother(dblack));
+    brother(dblack)->color = BLACK;
+    brother(dblack)->right->color = RED;
+    fixup_remove(root, dblack);
+		return;
+	}
+
+	if(color(brother(dblack)) == BLACK && color(brother(dblack)->right) == RED && color(brother(dblack)->left) == BLACK && is_left(brother(dblack))) {	
+    left_rotation(root, brother(dblack));
+    brother(dblack)->color = BLACK;
+    brother(dblack)->left->color = RED;
+    fixup_remove(root, dblack);
+    return;
+	}
+
+	if(color(brother(dblack)) == BLACK && color(brother(dblack)->right) == RED && !is_left(brother(dblack))) {
+    left_rotation(root, dblack->parent);
+    enum color temp_color = dblack->parent->parent->color;
+    dblack->parent->parent->color = dblack->parent->color;
+    dblack->parent->color = temp_color;
+    uncle(dblack)->color = BLACK;
+    remove_double_black(root, dblack);
+		return;
+	}
+
+	if(color(brother(dblack)) == BLACK && color(brother(dblack)->left) == RED && is_left(brother(dblack))) {
+    right_rotation(root, dblack->parent);
+    enum color temp_color = dblack->parent->parent->color;
+    dblack->parent->parent->color = dblack->parent->color;
+    dblack->parent->color = temp_color;
+    uncle(dblack)->color = BLACK;
+    remove_double_black(root, dblack);
+    return;
+	}
+}
+
+void remove_double_black(avp_root *root, avp_root node){
+  if(node == null_root){
+    if(is_root(node))
+      *root = NULL;
+    else{
+      if(is_left(node))
+        node->parent->left = NULL;
+      else
+        node->parent->right = NULL;
+    }
+  }else
+      node->color = BLACK;
+}
 
 void left_rotation(avp_root *root, avp_root pivot)
 {

@@ -19,10 +19,10 @@ int main(int argc, char **argv){
             avp_insert(&root, data);
             break;
         case 2:
-            printf("A ser implementado...\n");
-            // printf("Valor a ser removido: ");
-            // scanf("%d", &data);
-            // avp_remove(data, &root);
+            // printf("A ser implementado...\n");
+            printf("Valor a ser removido: ");
+            scanf("%d", &data);
+            avp_remove(&root, data);
             break;
         case 3:
             printf("Valor a ser consultado: ");
