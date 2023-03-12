@@ -16,10 +16,10 @@ bst_root bst_insert(bst_root root, int data);
 
 //remove
 bst_root bst_remove(bst_root root, int data);
-int bigger_left(bst_root root);
+int bst_bigger_left(bst_root root);
 
 //free
-void free_root(bst_root *root);
+void bst_free_root(bst_root *root);
 
 //query
 bst_root bst_search(bst_root root, int data);
@@ -27,7 +27,7 @@ bst_root bst_search(bst_root root, int data);
 //bst info
 int bst_qtd(bst_root root);
 int bst_height(bst_root root);
-int max(int a, int b);
+int bst_max(int a, int b);
 int bst_empty(bst_root root);
 
 //print

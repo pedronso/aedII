@@ -27,16 +27,16 @@ avp_root uncle(avp_root root);
 void avp_remove(avp_root * root, int data);
 void fixup_remove(avp_root *root, avp_root dblack);
 void remove_double_black(avp_root *root, avp_root node);
-int bigger_left(avp_root root);
+int avp_bigger_left(avp_root root);
 
 //rotation
-void left_rotation(avp_root *root, avp_root pivot);
-void right_rotation(avp_root *root, avp_root pivot);
-void double_left_rotation(avp_root *root, avp_root pivot);
-void double_right_rotation(avp_root *root, avp_root pivot);
+void avp_left_rotation(avp_root *root, avp_root pivot);
+void avp_right_rotation(avp_root *root, avp_root pivot);
+void avp_double_left_rotation(avp_root *root, avp_root pivot);
+void avp_double_right_rotation(avp_root *root, avp_root pivot);
 
 //free
-void free_root(avp_root *root);
+void avp_free_root(avp_root *root);
 
 //query
 avp_root avp_search(avp_root root, int data);
@@ -44,7 +44,7 @@ avp_root avp_search(avp_root root, int data);
 //avp info
 int avp_qtd(avp_root root);
 int avp_height(avp_root root);
-int max(int a, int b);
+int avp_max(int a, int b);
 int avp_empty(avp_root root);
 int avp_balance(avp_root root);
 

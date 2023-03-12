@@ -12,6 +12,7 @@ bst_root bst_insert(bst_root root, int data){
 		new->data = data;
 		new->left = NULL;
 		new->right = NULL;
+    printf("%d inserido!\n",data);
 		return new;
   }else{
     if(data < root->data) {
@@ -30,14 +31,16 @@ bst_root bst_remove(bst_root root, int data){
     if(root->left==NULL){
       bst_root temp = root->right;
       free(root);
+      printf("%d removido!\n",data);
       return temp;  
     }
     if(root->right==NULL){
       bst_root temp = root->left;
       free(root);
+      printf("%d removido!\n",data);
       return temp;  
     }
-    root->data=bigger_left(root->left);
+    root->data=bst_bigger_left(root->left);
     root->left=bst_remove(root->left,root->data);
     return root;
   }
@@ -50,17 +53,17 @@ bst_root bst_remove(bst_root root, int data){
   
 }
 
-int bigger_left(bst_root root) {
+int bst_bigger_left(bst_root root) {
 	if(root->right == NULL)
 			return root->data;
 	else
-			return bigger_left(root->right);
+			return bst_bigger_left(root->right);
 }
 
-void free_root(bst_root *root){
+void bst_free_root(bst_root *root){
   if(*root != NULL){
-    free_root(&(*root)->left);
-    free_root(&(*root)->right);
+    bst_free_root(&(*root)->left);
+    bst_free_root(&(*root)->right);
     free(*root);
     *root = NULL;
   }else{
@@ -88,10 +91,10 @@ int bst_qtd(bst_root root){
 int bst_height(bst_root root) {
 	if(root == NULL)
 		return 0;
-	return 1 + max(bst_height(root->right), bst_height(root->left));
+	return 1 + bst_max(bst_height(root->right), bst_height(root->left));
 }
 
-int max(int a, int b) {
+int bst_max(int a, int b) {
 	if(a > b)
 		return a;
 	else

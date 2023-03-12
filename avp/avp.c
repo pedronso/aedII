@@ -55,25 +55,25 @@ void fixup_insert(avp_root *root, avp_root new_root){
             continue;
         }
         if (is_left(new_root) && is_left(new_root->parent)){
-            right_rotation(root, new_root->parent->parent);
+            avp_right_rotation(root, new_root->parent->parent);
             new_root->parent->color = BLACK;
             new_root->parent->right->color = RED;
             continue;
         }
         if (is_left(new_root)==0 && is_left(new_root->parent)==0){
-            left_rotation(root, new_root->parent->parent);
+            avp_left_rotation(root, new_root->parent->parent);
             new_root->parent->color = BLACK;
             new_root->parent->left->color = RED;
             continue;
         }
         if (is_left(new_root)==0 && is_left(new_root->parent)){
-            double_right_rotation(root, new_root->parent->parent);
+            avp_double_right_rotation(root, new_root->parent->parent);
             new_root->parent->color = BLACK;
             new_root->parent->right->color = RED;
             continue;
         }
         if (is_left(new_root) && is_left(new_root->parent)==0){
-            double_left_rotation(root, new_root->parent->parent);
+            avp_double_left_rotation(root, new_root->parent->parent);
             new_root->parent->color = BLACK;
             new_root->parent->left->color = RED;
             continue;
@@ -116,7 +116,7 @@ void avp_remove(avp_root *root, int data)
 	while (temp != NULL) {
 		if (data == temp->data) {
       if (temp->left != NULL && temp->right != NULL) {
-    		temp->data = bigger_left(temp->left);
+    		temp->data = avp_bigger_left(temp->left);
 	    	avp_remove(&(temp->left),temp->data);
         printf("%d removido!\n",data);
         break;
@@ -186,9 +186,9 @@ void fixup_remove(avp_root *root, avp_root dblack){
 
 	if(color(dblack->parent) == BLACK && color(brother(dblack)) == RED && color(brother(dblack)->right) == BLACK && color(brother(dblack)->left) == BLACK) {
     if(is_left(dblack))
-        left_rotation(root, dblack->parent);
+        avp_left_rotation(root, dblack->parent);
     else
-        right_rotation(root, dblack->parent);	
+        avp_right_rotation(root, dblack->parent);	
     dblack->parent->parent->color = BLACK;
     dblack->parent->color = RED;
     fixup_remove(root, dblack);
@@ -212,7 +212,7 @@ void fixup_remove(avp_root *root, avp_root dblack){
 	}
 
 	if(color(brother(dblack)) == BLACK && color(brother(dblack)->right) == BLACK && color(brother(dblack)->left) == RED && !is_left(brother(dblack))) {	
-    right_rotation(root, brother(dblack));
+    avp_right_rotation(root, brother(dblack));
     brother(dblack)->color = BLACK;
     brother(dblack)->right->color = RED;
     fixup_remove(root, dblack);
@@ -220,7 +220,7 @@ void fixup_remove(avp_root *root, avp_root dblack){
 	}
 
 	if(color(brother(dblack)) == BLACK && color(brother(dblack)->right) == RED && color(brother(dblack)->left) == BLACK && is_left(brother(dblack))) {	
-    left_rotation(root, brother(dblack));
+    avp_left_rotation(root, brother(dblack));
     brother(dblack)->color = BLACK;
     brother(dblack)->left->color = RED;
     fixup_remove(root, dblack);
@@ -228,7 +228,7 @@ void fixup_remove(avp_root *root, avp_root dblack){
 	}
 
 	if(color(brother(dblack)) == BLACK && color(brother(dblack)->right) == RED && !is_left(brother(dblack))) {
-    left_rotation(root, dblack->parent);
+    avp_left_rotation(root, dblack->parent);
     enum color temp_color = dblack->parent->parent->color;
     dblack->parent->parent->color = dblack->parent->color;
     dblack->parent->color = temp_color;
@@ -238,7 +238,7 @@ void fixup_remove(avp_root *root, avp_root dblack){
 	}
 
 	if(color(brother(dblack)) == BLACK && color(brother(dblack)->left) == RED && is_left(brother(dblack))) {
-    right_rotation(root, dblack->parent);
+    avp_right_rotation(root, dblack->parent);
     enum color temp_color = dblack->parent->parent->color;
     dblack->parent->parent->color = dblack->parent->color;
     dblack->parent->color = temp_color;
@@ -262,7 +262,7 @@ void remove_double_black(avp_root *root, avp_root node){
       node->color = BLACK;
 }
 
-void left_rotation(avp_root *root, avp_root pivot)
+void avp_left_rotation(avp_root *root, avp_root pivot)
 {
     avp_root u, t1;
     u = pivot->right;
@@ -288,7 +288,7 @@ void left_rotation(avp_root *root, avp_root pivot)
     }
 }
 
-void right_rotation(avp_root *root, avp_root pivot)
+void avp_right_rotation(avp_root *root, avp_root pivot)
 {
     avp_root u, t1;
     u = pivot->left;
@@ -314,34 +314,34 @@ void right_rotation(avp_root *root, avp_root pivot)
     }
 }
 
-void double_left_rotation(avp_root *root, avp_root pivot)
+void avp_double_left_rotation(avp_root *root, avp_root pivot)
 {
     avp_root u = pivot->right;
-    right_rotation(root, u);
-    left_rotation(root, pivot);
+    avp_right_rotation(root, u);
+    avp_left_rotation(root, pivot);
 }
 
-void double_right_rotation(avp_root *root, avp_root pivot)
+void avp_double_right_rotation(avp_root *root, avp_root pivot)
 {
     avp_root u = pivot->left;
-    left_rotation(root, u);
-    right_rotation(root, pivot);
+    avp_left_rotation(root, u);
+    avp_right_rotation(root, pivot);
 }
 
-int bigger_left(avp_root root)
+int avp_bigger_left(avp_root root)
 {
   if (root->right == NULL)
     return root->data;
   else
-    return bigger_left(root->right);
+    return avp_bigger_left(root->right);
 }
 
-void free_root(avp_root *root)
+void avp_free_root(avp_root *root)
 {
   if (*root != NULL)
   {
-    free_root(&(*root)->left);
-    free_root(&(*root)->right);
+    avp_free_root(&(*root)->left);
+    avp_free_root(&(*root)->right);
     free(*root);
     *root = NULL;
   }
@@ -374,7 +374,7 @@ int avp_height(avp_root root)
 {
   if (root == NULL)
     return 0;
-  return 1 + max(avp_height(root->right), avp_height(root->left));
+  return 1 + avp_max(avp_height(root->right), avp_height(root->left));
 }
 
 int avp_balance(avp_root root)
@@ -382,7 +382,7 @@ int avp_balance(avp_root root)
   return avp_height(root->right) - avp_height(root->left);
 }
 
-int max(int a, int b)
+int avp_max(int a, int b)
 {
   if (a > b)
     return a;
