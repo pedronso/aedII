@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+
 #include "../bst/bst.h"
 #include "../avl/avl.h"
 #include "../avp/avp.h"
@@ -38,7 +39,7 @@ int main(int argc, char **argv)
       case 1:
         printf("Valor a ser inserido: ");
         scanf("%d", &data);
-        bst_root_main = bst_insert(bst_root_main, data);
+        bst_root_main = bst_insert(bst_root_main, data, 0);
         break;
       case 2:
         printf("Valor a ser removido: ");
@@ -52,7 +53,7 @@ int main(int argc, char **argv)
         if(bst_query==NULL)
           printf("Valor não existe\n");
         else
-          printf("Valor existe, %d\n", bst_query->data);
+          printf("Valor existe, %d\n", bst_query->data->key);
         printf("\n");
         break;
       case 4:
@@ -76,7 +77,7 @@ int main(int argc, char **argv)
       case 7:
         printf("Valor a ser inserido: ");
         scanf("%d", &data);
-        avl_root_main = avl_insert(avl_root_main, data, &growt);
+        avl_root_main = avl_insert(avl_root_main, data, 0, &growt);
         break;
       case 8:
         printf("Valor a ser removido: ");
@@ -90,7 +91,7 @@ int main(int argc, char **argv)
         if(avl_query==NULL)
             printf("Valor não existe\n");
         else
-        printf("Valor existe, %d\n", avl_query->data);
+        printf("Valor existe, %d\n", avl_query->data->key);
         printf("\n");
         break;
       case 10:
@@ -114,7 +115,7 @@ int main(int argc, char **argv)
       case 13:
         printf("Valor a ser inserido: ");
         scanf("%d", &data);
-        avp_insert(&avp_root_main, data);
+        avp_insert(&avp_root_main, data, 0);
         break;
       case 14:
         printf("Valor a ser removido: ");
@@ -128,7 +129,7 @@ int main(int argc, char **argv)
         if(avp_query==NULL)
             printf("Valor não existe\n");
         else
-        printf("Valor existe, %d\n", avp_query->data);
+        printf("Valor existe, %d\n", avp_query->data->key);
         printf("\n");
         break;
       case 16:
