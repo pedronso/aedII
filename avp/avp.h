@@ -3,8 +3,13 @@
 
 enum color {RED, BLACK, DBLACK};
 
+typedef struct avp_index {
+	int key;
+	int index;
+} avp_Index;
+
 typedef struct avp_node{
-  int data;
+  avp_Index *data;
   struct avp_node *left, *right, *parent;
   enum color color;
 }avp_node;
@@ -15,7 +20,7 @@ typedef struct avp_node * avp_root;
 void init_avp(avp_root *root);
 
 //insert
-void avp_insert(avp_root * root, int data);
+void avp_insert(avp_root * root, int data, int index);
 enum color color(avp_root root);
 void fixup_insert(avp_root *root, avp_root new_root);
 int is_root(avp_root root);

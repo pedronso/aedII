@@ -5,8 +5,11 @@
 
 int init_table(Table *table) {
     init_bst(&table->bst_index);	
+    init_avl(&table->avl_index);	
 	table->data_file = fopen(DATA_PATH, "a+");
-	load_file(BST_INDEX_PATH, &table->bst_index);
+	bst_load_file(BST_INDEX_PATH, &table->bst_index);
+	avl_load_file(AVL_INDEX_PATH, &table->avl_index);
+
 	if (table->data_file != NULL) {
 		return 1;
     } else {
@@ -14,15 +17,21 @@ int init_table(Table *table) {
     }
 }
 
-
 void insert_movie(Table *table, Movie *movie) {
     if(table->data_file != NULL) {
-        bst_root new = (bst_root) malloc(sizeof(bst_node));
-        bst_Index *new_index = (bst_Index *) malloc(sizeof(bst_Index*));
-        new_index->key = movie->code;
+        bst_root bst_new = (bst_root) malloc(sizeof(bst_node));
+        bst_Index *bst_new_index = (bst_Index *) malloc(sizeof(bst_Index*));
+        bst_new_index->key = movie->code;
+
+        avl_root avl_new = (avl_root) malloc(sizeof(avl_node));
+        avl_Index *avl_new_index = (avl_Index *) malloc(sizeof(avl_Index*));
+        avl_new_index->key = movie->rating;
+
+        int growt = 0;
 
         fseek(table->data_file, 0L, SEEK_END);
-        new_index->index = ftell(table->data_file);
+        bst_new_index->index = ftell(table->data_file);
+        avl_new_index->index = ftell(table->data_file);
         
         fprintf(table->data_file, "CODE=%d\n", movie->code);
         fprintf(table->data_file, "NAME=%s\n", movie->name);
@@ -31,14 +40,53 @@ void insert_movie(Table *table, Movie *movie) {
         fprintf(table->data_file, "RATING=%d\n", movie->rating);
         fprintf(table->data_file, "#\n");
 
-        new = bst_insert(table->bst_index, new_index->key, new_index->index);
-        table->bst_index = new;
+        bst_new = bst_insert(table->bst_index, bst_new_index->key, bst_new_index->index);
+        avl_new = avl_insert(table->avl_index, avl_new_index->key, avl_new_index->index, &growt);
+
+        table->bst_index = bst_new;
+        table->avl_index = avl_new;
+
 	}
 }
 
-Movie * search_movie(Table *table, int key) {
+Movie * bst_search_movie(Table *table, int key) {
     if (table->data_file != NULL) {
         bst_root temp = table->bst_index;
+        while (temp != NULL) {
+            if (temp->data->key == key) {
+                Movie * movie = (Movie *) malloc(sizeof(Movie));
+                char *buffer = (char *) malloc(256 * sizeof(char));
+                fseek(table->data_file, temp->data->index, SEEK_SET);
+                fgets(buffer, 256, table->data_file);
+                if (strcmp(buffer, "#\n") != 0) {
+                    movie->code = atoi(select_field(buffer));
+                    fgets(buffer, 355, table->data_file);
+                    movie->name = strdup(select_field(buffer));
+                    fgets(buffer, 355, table->data_file);
+                    movie->director = strdup(select_field(buffer));
+                    fgets(buffer, 355, table->data_file);
+                    movie->year = atoi(select_field(buffer));
+                    fgets(buffer, 355, table->data_file);
+                    movie->rating = atoi(select_field(buffer));
+                }
+                free(buffer);
+                return movie;
+            } else {
+                if (key >= temp->data->key) {
+                    temp = temp->right;
+                } else {
+                    temp = temp->left;                
+                }
+            }
+        }
+    }
+
+    return NULL;
+}
+
+Movie * avl_search_movie(Table *table, int key) {
+    if (table->data_file != NULL) {
+        avl_root temp = table->avl_index;
         while (temp != NULL) {
             if (temp->data->key == key) {
                 Movie * movie = (Movie *) malloc(sizeof(Movie));
@@ -102,24 +150,41 @@ Movie * input_aux() {
 	return new_movie;
 }
 
-void save_file(char *name, bst_root root) {
+void bst_save_file(char *name, bst_root root) {
     FILE *file;
 	file = fopen(name, "wb");
 	if (file != NULL) {
-		save_tree(root, file);
+		bst_save_tree(root, file);
 		fclose(file);
 	}
 }
 
-void save_tree(bst_root root, FILE *file) {
-    if (root != NULL) {
-        fwrite(root->data, sizeof(bst_Index), 1, file);
-		save_tree(root->left, file);
-		save_tree(root->right, file);
+void avl_save_file(char *name, avl_root root) {
+    FILE *file;
+	file = fopen(name, "wb");
+	if (file != NULL) {
+		avl_save_tree(root, file);
+		fclose(file);
 	}
 }
 
-void load_file(char *bst_name, bst_root * bst) {
+void bst_save_tree(bst_root root, FILE *file) {
+    if (root != NULL) {
+        fwrite(root->data, sizeof(bst_Index), 1, file);
+		bst_save_tree(root->left, file);
+		bst_save_tree(root->right, file);
+	}
+}
+
+void avl_save_tree(avl_root root, FILE *file) {
+    if (root != NULL) {
+        fwrite(root->data, sizeof(avl_Index), 1, file);
+		avl_save_tree(root->left, file);
+		avl_save_tree(root->right, file);
+	}
+}
+
+void bst_load_file(char *bst_name, bst_root * bst) {
     FILE *bst_file = fopen(bst_name, "rb");
     bst_root bst_new = (bst_root) malloc(sizeof(bst_node));
 	bst_Index *bst_temp;
@@ -135,9 +200,27 @@ void load_file(char *bst_name, bst_root * bst) {
         printf("bst nula\n");
 }
 
+void avl_load_file(char *avl_name, avl_root * avl) {
+    FILE *avl_file = fopen(avl_name, "rb");
+    avl_root avl_new = (avl_root) malloc(sizeof(avl_node));
+	avl_Index *avl_temp;
+    int growt = 0;
+	if (avl_file != NULL) {
+		avl_temp = (avl_Index*) malloc(sizeof(avl_Index));
+		while(fread(avl_temp, sizeof(avl_Index), 1, avl_file)) {
+			avl_new = avl_insert(*avl, avl_temp->key, avl_temp->index,&growt);	
+            *avl = avl_new;		
+			avl_temp = (avl_Index *) malloc(sizeof(avl_Index));
+		}
+		fclose(avl_file);
+	}else
+        printf("avl nula\n");
+}
+
 void finish(Table *table) {
     fclose(table->data_file);
-	save_file(BST_INDEX_PATH, table->bst_index);
+	bst_save_file(BST_INDEX_PATH, table->bst_index);
+	avl_save_file(AVL_INDEX_PATH, table->avl_index);
 }
 
 char * select_field(char *string) {

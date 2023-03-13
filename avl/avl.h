@@ -1,8 +1,14 @@
 #ifndef AVL_H
 #define AVL_H
 
+typedef struct avl_index {
+	int key;
+	int index;
+} avl_Index;
+
 typedef struct avl_node{
-  int data,bf;
+  avl_Index *data;
+  int bf;
   struct avl_node *left, *right;
 }avl_node;
 
@@ -12,7 +18,7 @@ typedef struct avl_node * avl_root;
 void init_avl(avl_root *root);
 
 //insert
-avl_root avl_insert(avl_root root, int data, int * grown);
+avl_root avl_insert(avl_root root, int data, int index, int * grown);
 
 //remove
 avl_root avl_remove(avl_root root, int data, int * shrink);

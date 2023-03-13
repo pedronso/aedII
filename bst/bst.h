@@ -1,8 +1,13 @@
 #ifndef BST_H
 #define BST_H
 
+typedef struct bst_index {
+	int key;
+	int index;
+} bst_Index;
+
 typedef struct bst_node{
-  int data;
+  bst_Index *data;
   struct bst_node *left, *right;
 }bst_node;
 
@@ -12,7 +17,7 @@ typedef struct bst_node * bst_root;
 void init_bst(bst_root *root);
 
 //insert
-bst_root bst_insert(bst_root root, int data);
+bst_root bst_insert(bst_root root, int data, int index);
 
 //remove
 bst_root bst_remove(bst_root root, int data);

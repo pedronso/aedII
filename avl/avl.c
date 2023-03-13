@@ -6,20 +6,23 @@ void init_avl(avl_root *root){
   *root = NULL;
 }
 
-avl_root avl_insert(avl_root root, int data, int *grown){
+avl_root avl_insert(avl_root root, int data, int index, int *grown){
   if (root == NULL){
     avl_root new = (avl_root)malloc(sizeof(avl_node));
-    new->data = data;
+    avl_Index* new_Index = (avl_Index*) malloc(sizeof(avl_Index*));
+    new->data = new_Index;
+    new->data->key = data;
+    new->data->index = index;
     new->left = NULL;
     new->right = NULL;
     new->bf = 0;
     *grown = 1;
-    printf("%d inserido!\n",data);
+    printf("%d inserido na AVL!\n",data);
     return new;
   }
   else{
-    if (data < root->data){
-      root->left = avl_insert(root->left, data, grown);
+    if (data < root->data->key){
+      root->left = avl_insert(root->left, data, index, grown);
       if (*grown){
         switch (root->bf){
         case 0:
@@ -36,7 +39,7 @@ avl_root avl_insert(avl_root root, int data, int *grown){
         }
       }
     }else{
-      root->right = avl_insert(root->right, data, grown);
+      root->right = avl_insert(root->right, data, index, grown);
       if (*grown){
         switch (root->bf){
         case 0:
@@ -62,14 +65,14 @@ avl_root avl_remove(avl_root root, int data, int *shrink)
 {
   if (root == NULL)
     return NULL;
-  if (root->data == data)
+  if (root->data->key == data)
   {
     if (root->left == NULL)
     {
       avl_root temp = root->right;
       free(root);
       *shrink = 1;
-      printf("%d removido!\n",data);
+      printf("%d removido da AVL!\n",data);
       return temp;
     }
     if (root->right == NULL)
@@ -77,11 +80,11 @@ avl_root avl_remove(avl_root root, int data, int *shrink)
       avl_root temp = root->left;
       free(root);
       *shrink = 1;
-      printf("%d removido!\n",data);
+      printf("%d removido da AVL!\n",data);
       return temp;
     }
-    root->data = avl_bigger_left(root->left);
-    root->left = avl_remove(root->left, root->data, shrink);
+    root->data->key = avl_bigger_left(root->left);
+    root->left = avl_remove(root->left, root->data->key, shrink);
     *shrink = 1;
 
     if (*shrink)
@@ -104,7 +107,7 @@ avl_root avl_remove(avl_root root, int data, int *shrink)
 
     return root;
   }
-  if (data < root->data)
+  if (data < root->data->key)
   {
     root->left = avl_remove(root->left, data, shrink);
     if (*shrink)
@@ -293,7 +296,7 @@ avl_root avl_double_right_rotation(avl_root root)
 int avl_bigger_left(avl_root root)
 {
   if (root->right == NULL)
-    return root->data;
+    return root->data->key;
   else
     return avl_bigger_left(root->right);
 }
@@ -313,9 +316,9 @@ void avl_free_root(avl_root *root)
 
 avl_root avl_search(avl_root root, int data)
 {
-  if (root == NULL || data == root->data)
+  if (root == NULL || data == root->data->key)
     return root;
-  if (data < root->data)
+  if (data < root->data->key)
     return avl_search(root->left, data);
   else
     return avl_search(root->right, data);
@@ -361,11 +364,11 @@ void avl_pre(avl_root root)
   {
     int l = 0, r = 0;
     if (root->left != NULL)
-      l = root->left->data;
+      l = root->left->data->key;
     if (root->right != NULL)
-      r = root->right->data;
+      r = root->right->data->key;
 
-    printf("%d, bf:%d, l:%d, r:%d\n", root->data, root->bf, l, r);
+    printf("%d, bf:%d, l:%d, r:%d\n", root->data->key, root->bf, l, r);
     avl_pre(root->left);
     avl_pre(root->right);
   }
@@ -377,13 +380,13 @@ void avl_pos(avl_root root)
   {
     int l = 0, r = 0;
     if (root->left != NULL)
-      l = root->left->data;
+      l = root->left->data->key;
     if (root->right != NULL)
-      r = root->right->data;
+      r = root->right->data->key;
 
     avl_pos(root->left);
     avl_pos(root->right);
-    printf("%d, bf:%d, l:%d, r:%d\n", root->data, root->bf, l, r);
+    printf("%d, bf:%d, l:%d, r:%d\n", root->data->key, root->bf, l, r);
 
   }
 }
@@ -394,12 +397,12 @@ void avl_in(avl_root root)
   {
     int l = 0, r = 0;
     if (root->left != NULL)
-      l = root->left->data;
+      l = root->left->data->key;
     if (root->right != NULL)
-      r = root->right->data;
+      r = root->right->data->key;
 
     avl_in(root->left);
-    printf("%d, bf:%d, l:%d, r:%d\n", root->data, root->bf, l, r);
+    printf("%d, bf:%d, l:%d, r:%d\n", root->data->key, root->bf, l, r);
     avl_in(root->right);
   }
 }
