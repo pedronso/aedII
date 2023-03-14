@@ -13,7 +13,7 @@ int main(int argc, char ** argv) {
     }
 
 	while (1) {
-        printf("\n1- Inserir elemento\n2- Consultar elemento\n3- Pre-order dos indices\n4- Consultar (AVL)\n5- Pre-order (AVL)\n0- Sair\n");
+        printf("\n1- Inserir elemento\n2- Consultar elemento\n3- Pre-order dos indices\n4- Consultar (AVL)\n5- Pre-order (AVL)\n6-Pre-order (AVP)\n0- Sair\n");
 		scanf("%d", &option);
         printf("\n");
 
@@ -55,6 +55,10 @@ int main(int argc, char ** argv) {
                 break;    
             case 5:
                 avl_pre(table.avl_index);
+                printf("\n");
+                break;
+            case 6:
+                avp_pre(table.avp_index);
                 printf("\n");
                 break;
             case 0:

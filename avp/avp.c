@@ -6,11 +6,6 @@ avp_root null_root;
 
 void init_avp(avp_root *root){
   *root = NULL;
-  null_root = (avp_root) malloc(sizeof(avp_node));
-	null_root->data->key = 0;
-  null_root->left = NULL;
-  null_root->right = NULL;
-	null_root->color = DBLACK;
 }
 
 void avp_insert(avp_root * root, int data, int index){
