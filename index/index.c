@@ -39,6 +39,8 @@ void insert_movie(Table *table, Movie *movie) {
         fprintf(table->data_file, "YEAR=%d\n", movie->year);
         fprintf(table->data_file, "RATING=%d\n", movie->rating);
         fprintf(table->data_file, "#\n");
+        
+        printf("Filme armazenado em disco!\n");
 
         bst_new = bst_insert(table->bst_index, bst_new_index->key, bst_new_index->index);
         avl_new = avl_insert(table->avl_index, avl_new_index->key, avl_new_index->index, &growt);
@@ -190,6 +192,7 @@ void bst_load_file(char *bst_name, bst_root * bst) {
 	bst_Index *bst_temp;
 	if (bst_file != NULL) {
 		bst_temp = (bst_Index*) malloc(sizeof(bst_Index));
+        printf("\nReconstruindo BST de indices com valores armazenados em disco:\n");
 		while(fread(bst_temp, sizeof(bst_Index), 1, bst_file)) {
 			bst_new = bst_insert(*bst, bst_temp->key, bst_temp->index);	
             *bst = bst_new;		
@@ -197,7 +200,7 @@ void bst_load_file(char *bst_name, bst_root * bst) {
 		}
 		fclose(bst_file);
 	}else
-        printf("bst nula\n");
+        printf("BST nula.\n");
 }
 
 void avl_load_file(char *avl_name, avl_root * avl) {
@@ -207,6 +210,7 @@ void avl_load_file(char *avl_name, avl_root * avl) {
     int growt = 0;
 	if (avl_file != NULL) {
 		avl_temp = (avl_Index*) malloc(sizeof(avl_Index));
+        printf("\nReconstruindo AVL de indices com valores armazenados em disco:\n");
 		while(fread(avl_temp, sizeof(avl_Index), 1, avl_file)) {
 			avl_new = avl_insert(*avl, avl_temp->key, avl_temp->index,&growt);	
             *avl = avl_new;		
@@ -214,7 +218,7 @@ void avl_load_file(char *avl_name, avl_root * avl) {
 		}
 		fclose(avl_file);
 	}else
-        printf("avl nula\n");
+        printf("AVL nula\n");
 }
 
 void finish(Table *table) {

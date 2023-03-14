@@ -9,6 +9,8 @@
 #define DATA_PATH "data/data.txt"
 #define BST_INDEX_PATH "data/bst_index.dat"
 #define AVL_INDEX_PATH "data/avl_index.dat"
+#define AVP_INDEX_PATH "data/avp_index.dat"
+
 
 
 typedef struct movie {
@@ -28,20 +30,27 @@ typedef struct table {
 	FILE *data_file;
 	bst_root bst_index;
 	avl_root avl_index;
+	avp_root avp_index;
 } Table;
 
 int init_table(Table *table);
 void insert_movie(Table *table, Movie *movie);
 Movie * bst_search_movie(Table *table, int key);
 Movie * avl_search_movie(Table *table, int key);
+// Movie * avp_search_movie(Table *table, int key);
+
 Movie * input_aux();
 
 void bst_save_file(char *name, bst_root root);
 void avl_save_file(char *name, avl_root root);
+// void avp_save_file(char *name, avp_root root);
 void bst_save_tree(bst_root root, FILE *file);
 void avl_save_tree(avl_root root, FILE *file);
+// void avp_save_tree(avp_root root, FILE *file);
 void bst_load_file(char *name, bst_root *root);
 void avl_load_file(char *name, avl_root *root);
+// void avp_load_file(char *name, avp_root *root);
+
 
 
 void finish(Table *table);
