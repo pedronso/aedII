@@ -160,6 +160,40 @@ Movie * avp_search_movie(Table *table, int key) {
     return NULL;
 }
 
+void bst_order_search(Table * table, bst_root root) {
+    if(root != NULL){
+        bst_order_search(table, root->left);
+        retrieve_data(table,root);
+        bst_order_search(table, root->right);
+    }
+}
+
+void retrieve_data(Table * table, bst_root root){
+    Movie * movie = (Movie *) malloc(sizeof(Movie));
+    char *buffer = (char *) malloc(256 * sizeof(char));
+    fseek(table->data_file, root->data->index, SEEK_SET);
+    fgets(buffer, 256, table->data_file);
+    if (strcmp(buffer, "#\n") != 0) {
+        movie->code = atoi(select_field(buffer));
+        fgets(buffer, 355, table->data_file);
+        movie->name = strdup(select_field(buffer));
+        fgets(buffer, 355, table->data_file);
+        movie->director = strdup(select_field(buffer));
+        fgets(buffer, 355, table->data_file);
+        movie->year = atoi(select_field(buffer));
+        fgets(buffer, 355, table->data_file);
+        movie->rating = atoi(select_field(buffer));
+    }
+    free(buffer);
+    if (movie != NULL) {
+        printf("\nCode: %d\n", movie->code);
+        printf("Name: %s\n", movie->name);
+        printf("Director: %s\n", movie->director);
+        printf("Year: %d\n", movie->year);
+        printf("Rating: %d\n", movie->rating);
+    } else
+        printf("Filme nao encontrado!\n");
+}
 
 Movie * input_aux() {
     Movie *new_movie = (Movie *) malloc(sizeof(Movie));
@@ -188,6 +222,8 @@ Movie * input_aux() {
     getchar();
 
     free(buffer);
+
+    printf("\n");
 
 	return new_movie;
 }
