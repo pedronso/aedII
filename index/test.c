@@ -33,11 +33,11 @@ int main(int argc, char ** argv) {
                 scanf("%d", &key);
                 movie = bst_search_movie(&table, key);
                 if (movie != NULL) {
-                    printf("\nCode: %d\n", movie->code);
-                    printf("Name: %s\n", movie->name);
-                    printf("Director: %s\n", movie->director);
-                    printf("Year: %d\n", movie->year);
-                    printf("Rating: %d\n", movie->rating);
+                    printf("\nCodigo: %d\n", movie->code);
+                    printf("Nome: %s\n", movie->name);
+                    printf("Diretor: %s\n", movie->director);
+                    printf("Ano: %d\n", movie->year);
+                    printf("Nota: %d\n", movie->rating);
                 } else
                     printf("Filme nao encontrado!\n");
                 break;
@@ -46,11 +46,11 @@ int main(int argc, char ** argv) {
                 scanf("%d", &key);
                 movie = avl_search_movie(&table, key);
                 if (movie != NULL) {
-                    printf("\nCode: %d\n", movie->code);
-                    printf("Name: %s\n", movie->name);
-                    printf("Director: %s\n", movie->director);
-                    printf("Year: %d\n", movie->year);
-                    printf("Rating: %d\n", movie->rating);
+                    printf("\nCodigo: %d\n", movie->code);
+                    printf("Nome: %s\n", movie->name);
+                    printf("Diretor: %s\n", movie->director);
+                    printf("Ano: %d\n", movie->year);
+                    printf("Nota: %d\n", movie->rating);
                 } else
                     printf("Filme nao encontrado!\n");
                 break;
@@ -59,11 +59,11 @@ int main(int argc, char ** argv) {
                 scanf("%d", &key);
                 movie = avp_search_movie(&table, key);
                 if (movie != NULL) {
-                    printf("\nCode: %d\n", movie->code);
-                    printf("Name: %s\n", movie->name);
-                    printf("Director: %s\n", movie->director);
-                    printf("Year: %d\n", movie->year);
-                    printf("Rating: %d\n", movie->rating);
+                    printf("\nCodigo: %d\n", movie->code);
+                    printf("Nome: %s\n", movie->name);
+                    printf("Diretor: %s\n", movie->director);
+                    printf("Ano: %d\n", movie->year);
+                    printf("Nota: %d\n", movie->rating);
                 } else
                     printf("Filme nao encontrado!\n");
                 break;    

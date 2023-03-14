@@ -69,9 +69,22 @@ void remove_movie(Table * table, int key){
     // } else
     //     printf("Filme nao encontrado!\n");
 
-    bst_remove(table->bst_index, key);
-    avl_remove(table->avl_index, movie->rating, &shrink);
-    avp_remove(&table->avp_index, movie->year);
+    if (movie != NULL) {
+        printf("\nFilme encontrado:\n");
+
+        printf("\nCode: %d\n", movie->code);
+        printf("Name: %s\n", movie->name);
+        printf("Director: %s\n", movie->director);
+        printf("Year: %d\n", movie->year);
+        printf("Rating: %d\n", movie->rating);
+        
+
+        bst_remove(table->bst_index, key);
+        avl_remove(table->avl_index, movie->rating, &shrink);
+        avp_remove(&table->avp_index, movie->year);
+    } else
+        printf("\nFilme nao encontrado!\n");
+    
 
 }
 
