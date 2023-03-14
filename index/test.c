@@ -24,7 +24,9 @@ int main(int argc, char ** argv) {
                 insert_movie(&table, input_aux());
                 break;
             case 2:
-                insert_movie(&table, input_aux());
+                printf("Codigo do filme: ");
+                scanf("%d", &key);
+                remove_movie(&table, key);
                 break;    
             case 3:
                 printf("Codigo do filme: ");
@@ -66,7 +68,7 @@ int main(int argc, char ** argv) {
                     printf("Filme nao encontrado!\n");
                 break;    
             case 6:
-                bst_in(table.bst_index);
+                bst_pre(table.bst_index);
                 printf("\n");
                 break;
             case 7:

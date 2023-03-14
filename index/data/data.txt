@@ -94,3 +94,33 @@ DIRECTOR=asdasd
 YEAR=12
 RATING=12
 #
+CODE=6
+NAME=pedro pedro pedro pedro pedro
+DIRECTOR=pedro pedro pedro pedro pedro
+YEAR=2010
+RATING=7
+#
+CODE=7
+NAME=pedro pedro pedro pedro pedro pedro
+DIRECTOR=pedro pedro pedro pedro pedro pedro
+YEAR=2011
+RATING=6
+#
+CODE=13
+NAME=pedro
+DIRECTOR=pedro
+YEAR=3
+RATING=8
+#
+CODE=15
+NAME=pedro
+DIRECTOR=pedro
+YEAR=4
+RATING=9
+#
+CODE=19
+NAME=pedro
+DIRECTOR=pedro
+YEAR=5
+RATING=10
+#

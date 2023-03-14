@@ -35,6 +35,7 @@ typedef struct table {
 
 int init_table(Table *table);
 void insert_movie(Table *table, Movie *movie);
+void remove_movie(Table *table, int key);
 Movie * bst_search_movie(Table *table, int key);
 Movie * avl_search_movie(Table *table, int key);
 Movie * avp_search_movie(Table *table, int key);

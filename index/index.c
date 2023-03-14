@@ -7,7 +7,6 @@ int init_table(Table *table) {
     init_bst(&table->bst_index);	
     init_avl(&table->avl_index);	
     init_avp(&table->avp_index);
-    //ERRO DE NÃO ACESSAR FILE DA BST ACONTECE AO INICIALIZAR A AVP	
 	table->data_file = fopen(DATA_PATH, "a+");
 	bst_load_file(BST_INDEX_PATH, &table->bst_index);
 	avl_load_file(AVL_INDEX_PATH, &table->avl_index);
@@ -58,6 +57,24 @@ void insert_movie(Table *table, Movie *movie) {
 	}
 }
 
+void remove_movie(Table * table, int key){
+    int shrink = 0;
+    Movie * movie = bst_search_movie(table, key);
+    // if (movie != NULL) {
+    //     printf("\nCode: %d\n", movie->code);
+    //     printf("Name: %s\n", movie->name);
+    //     printf("Director: %s\n", movie->director);
+    //     printf("Year: %d\n", movie->year);
+    //     printf("Rating: %d\n", movie->rating);
+    // } else
+    //     printf("Filme nao encontrado!\n");
+
+    bst_remove(table->bst_index, key);
+    avl_remove(table->avl_index, movie->rating, &shrink);
+    avp_remove(&table->avp_index, movie->year);
+
+}
+
 Movie * bst_search_movie(Table *table, int key) {
     if (table->data_file != NULL) {
         bst_root temp = table->bst_index;
@@ -69,13 +86,13 @@ Movie * bst_search_movie(Table *table, int key) {
                 fgets(buffer, 256, table->data_file);
                 if (strcmp(buffer, "#\n") != 0) {
                     movie->code = atoi(select_field(buffer));
-                    fgets(buffer, 355, table->data_file);
+                    fgets(buffer, 256, table->data_file);
                     movie->name = strdup(select_field(buffer));
-                    fgets(buffer, 355, table->data_file);
+                    fgets(buffer, 256, table->data_file);
                     movie->director = strdup(select_field(buffer));
-                    fgets(buffer, 355, table->data_file);
+                    fgets(buffer, 256, table->data_file);
                     movie->year = atoi(select_field(buffer));
-                    fgets(buffer, 355, table->data_file);
+                    fgets(buffer, 256, table->data_file);
                     movie->rating = atoi(select_field(buffer));
                 }
                 free(buffer);
@@ -103,13 +120,13 @@ Movie * avl_search_movie(Table *table, int key) {
                 fgets(buffer, 256, table->data_file);
                 if (strcmp(buffer, "#\n") != 0) {
                     movie->code = atoi(select_field(buffer));
-                    fgets(buffer, 355, table->data_file);
+                    fgets(buffer, 256, table->data_file);
                     movie->name = strdup(select_field(buffer));
-                    fgets(buffer, 355, table->data_file);
+                    fgets(buffer, 256, table->data_file);
                     movie->director = strdup(select_field(buffer));
-                    fgets(buffer, 355, table->data_file);
+                    fgets(buffer, 256, table->data_file);
                     movie->year = atoi(select_field(buffer));
-                    fgets(buffer, 355, table->data_file);
+                    fgets(buffer, 256, table->data_file);
                     movie->rating = atoi(select_field(buffer));
                 }
                 free(buffer);
@@ -137,13 +154,13 @@ Movie * avp_search_movie(Table *table, int key) {
                 fgets(buffer, 256, table->data_file);
                 if (strcmp(buffer, "#\n") != 0) {
                     movie->code = atoi(select_field(buffer));
-                    fgets(buffer, 355, table->data_file);
+                    fgets(buffer, 256, table->data_file);
                     movie->name = strdup(select_field(buffer));
-                    fgets(buffer, 355, table->data_file);
+                    fgets(buffer, 256, table->data_file);
                     movie->director = strdup(select_field(buffer));
-                    fgets(buffer, 355, table->data_file);
+                    fgets(buffer, 256, table->data_file);
                     movie->year = atoi(select_field(buffer));
-                    fgets(buffer, 355, table->data_file);
+                    fgets(buffer, 256, table->data_file);
                     movie->rating = atoi(select_field(buffer));
                 }
                 free(buffer);
@@ -175,13 +192,13 @@ void retrieve_data(Table * table, bst_root root){
     fgets(buffer, 256, table->data_file);
     if (strcmp(buffer, "#\n") != 0) {
         movie->code = atoi(select_field(buffer));
-        fgets(buffer, 355, table->data_file);
+        fgets(buffer, 256, table->data_file);
         movie->name = strdup(select_field(buffer));
-        fgets(buffer, 355, table->data_file);
+        fgets(buffer, 256, table->data_file);
         movie->director = strdup(select_field(buffer));
-        fgets(buffer, 355, table->data_file);
+        fgets(buffer, 256, table->data_file);
         movie->year = atoi(select_field(buffer));
-        fgets(buffer, 355, table->data_file);
+        fgets(buffer, 256, table->data_file);
         movie->rating = atoi(select_field(buffer));
     }
     free(buffer);
