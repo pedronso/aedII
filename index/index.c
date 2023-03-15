@@ -35,9 +35,8 @@ void insert_movie(Table *table, Movie *movie) {
         avp_new_index->key = movie->year;
 
         fseek(table->data_file, 0L, SEEK_END);
-        bst_new_index->index = ftell(table->data_file);
-        avl_new_index->index = ftell(table->data_file);
-        avp_new_index->index = ftell(table->data_file);
+        avp_new_index->index = avl_new_index->index = bst_new_index->index = ftell(table->data_file);
+
         
         fprintf(table->data_file, "CODE=%d\n", movie->code);
         fprintf(table->data_file, "NAME=%s\n", movie->name);
@@ -374,6 +373,7 @@ char * select_field(char *string) {
         i++;
     for (j = i + 1, k = 0; j < strlen(string) - 1; j++, k++)
         value[k] = string[j];
+    value[k]='\0';
     return value;
 }
 

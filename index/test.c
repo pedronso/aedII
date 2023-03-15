@@ -7,6 +7,7 @@ int main(int argc, char ** argv) {
     Movie *movie;
 	int option, key;
     float rating;
+    char *buffer = (char *) malloc(256 * sizeof(char));
 
 	if (!init_table(&table)) {
         printf("Erro ao carregar tabela de dados.");
