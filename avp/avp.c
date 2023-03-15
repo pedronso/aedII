@@ -6,6 +6,7 @@ avp_root null_root;
 
 void init_avp(avp_root *root){
   *root = NULL;
+  
 }
 
 void avp_insert(avp_root * root, int data, int index){
@@ -46,6 +47,7 @@ void avp_insert(avp_root * root, int data, int index){
 void fixup_insert(avp_root *root, avp_root new_root){
     while(color(new_root) == RED && color(new_root->parent)==RED ){
         if(color(uncle(new_root))==RED){
+            printf("teste 1");
             uncle(new_root)->color = BLACK;
             new_root->parent->color = BLACK;
             new_root->parent->parent->color = RED;
@@ -53,27 +55,32 @@ void fixup_insert(avp_root *root, avp_root new_root){
             continue;
         }
         if (is_left(new_root) && is_left(new_root->parent)){
+            printf("teste 2");
             avp_right_rotation(root, new_root->parent->parent);
             new_root->parent->color = BLACK;
             new_root->parent->right->color = RED;
             continue;
         }
         if (is_left(new_root)==0 && is_left(new_root->parent)==0){
+            printf("teste 3");
             avp_left_rotation(root, new_root->parent->parent);
             new_root->parent->color = BLACK;
             new_root->parent->left->color = RED;
             continue;
         }
         if (is_left(new_root)==0 && is_left(new_root->parent)){
+            printf("teste 4");
             avp_double_right_rotation(root, new_root->parent->parent);
-            new_root->parent->color = BLACK;
-            new_root->parent->right->color = RED;
+            new_root->color = BLACK;
+            new_root->right->color = RED;
             continue;
         }
         if (is_left(new_root) && is_left(new_root->parent)==0){
+            printf("teste 5");
             avp_double_left_rotation(root, new_root->parent->parent);
-            new_root->parent->color = BLACK;
-            new_root->parent->left->color = RED;
+            new_root->color = BLACK;
+            new_root->left->color = RED;
+            avp_pre(*root);
             continue;
         }
     }

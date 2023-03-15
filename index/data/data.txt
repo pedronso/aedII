@@ -184,3 +184,15 @@ DIRECTOR=3
 YEAR=3
 RATING=3
 #
+CODE=12
+NAME=pedro
+DIRECTOR=pedro
+YEAR=1
+RATING=2
+#
+CODE=1
+NAME=pedro pedro pedro
+DIRECTOR=pedro pedro pedro
+YEAR=1
+RATING=1
+#

@@ -16,7 +16,7 @@ int main(int argc, char **argv){
         case 1:
             printf("Valor a ser inserido: ");
             scanf("%d", &data);
-            avp_insert(&root, data);
+            avp_insert(&root, data,0);
             break;
         case 2:
             printf("Valor a ser removido: ");
