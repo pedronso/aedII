@@ -112,7 +112,7 @@ int bst_empty(bst_root root){
 
 void bst_pre(bst_root root){
   if(root != NULL){
-    printf("%d\n", root->data->key);
+    printf("data : %d\n", root->data->key);
     bst_pre(root->left);
     bst_pre(root->right);
   }

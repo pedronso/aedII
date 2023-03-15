@@ -78,8 +78,8 @@ void remove_movie(Table * table, int key){
         printf("Rating: %d\n", movie->rating);
         
 
-        bst_remove(table->bst_index, key);
-        avl_remove(table->avl_index, movie->rating, &shrink);
+        table->bst_index = bst_remove(table->bst_index, key);
+        table->avl_index = avl_remove(table->avl_index, movie->rating, &shrink);
         avp_remove(&table->avp_index, movie->year);
     } else
         printf("\nFilme nao encontrado!\n");

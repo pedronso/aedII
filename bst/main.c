@@ -19,7 +19,7 @@ int main(int argc, char **argv)
       case 1:
         printf("Valor a ser inserido: ");
         scanf("%d", &data);
-        root = bst_insert(root, data);
+        root = bst_insert(root, data, 0);
         break;
       case 2:
         printf("Valor a ser removido: ");
@@ -33,7 +33,7 @@ int main(int argc, char **argv)
         if(query==NULL)
           printf("Valor não existe\n");
         else
-          printf("Valor existe, %d\n", query->data);
+          printf("Valor existe, %d\n", query->data->key);
         printf("\n");
         break;
       case 4:
