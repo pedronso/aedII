@@ -1,27 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "avl.h"
 
 void init_avl(avl_root *root){
   *root = NULL;
 }
 
-avl_root avl_insert(avl_root root, int data, int index, int *grown){
+avl_root avl_insert(avl_root root, char * data, int index, int *grown){
   if (root == NULL){
     avl_root new = (avl_root)malloc(sizeof(avl_node));
     avl_Index* new_Index = (avl_Index*) malloc(sizeof(avl_Index*));
     new->data = new_Index;
-    new->data->key = data;
+    strcpy(new->data->key, data);
     new->data->index = index;
     new->left = NULL;
     new->right = NULL;
     new->bf = 0;
     *grown = 1;
-    printf("%d inserido na AVL!\n",data);
+    printf("%s inserido na AVL!\n",data);
     return new;
   }
   else{
-    if (data < root->data->key){
+    if (strcmp(data, root->data->key)<0){
       root->left = avl_insert(root->left, data, index, grown);
       if (*grown){
         switch (root->bf){
@@ -61,11 +62,11 @@ avl_root avl_insert(avl_root root, int data, int index, int *grown){
   }
 }
 
-avl_root avl_remove(avl_root root, int data, int *shrink)
+avl_root avl_remove(avl_root root, char * data, int *shrink)
 {
   if (root == NULL)
     return NULL;
-  if (root->data->key == data)
+  if (strcmp(data, root->data->key)==0)
   {
     if (root->left == NULL)
     {
@@ -83,7 +84,7 @@ avl_root avl_remove(avl_root root, int data, int *shrink)
       printf("%d removido da AVL!\n",data);
       return temp;
     }
-    root->data->key = avl_bigger_left(root->left);
+    strcpy(root->data->key, avl_bigger_left(root->left));
     root->left = avl_remove(root->left, root->data->key, shrink);
     *shrink = 1;
 
@@ -107,7 +108,7 @@ avl_root avl_remove(avl_root root, int data, int *shrink)
 
     return root;
   }
-  if (data < root->data->key)
+  if (strcmp(data, root->data->key)<0)
   {
     root->left = avl_remove(root->left, data, shrink);
     if (*shrink)
@@ -293,7 +294,7 @@ avl_root avl_double_right_rotation(avl_root root)
   return v;
 }
 
-int avl_bigger_left(avl_root root)
+char * avl_bigger_left(avl_root root)
 {
   if (root->right == NULL)
     return root->data->key;
@@ -314,11 +315,11 @@ void avl_free_root(avl_root *root)
     return;
 }
 
-avl_root avl_search(avl_root root, int data)
+avl_root avl_search(avl_root root, char * data)
 {
-  if (root == NULL || data == root->data->key)
+  if (root == NULL || strcmp(data, root->data->key)==0)
     return root;
-  if (data < root->data->key)
+  if (strcmp(data, root->data->key)<0)
     return avl_search(root->left, data);
   else
     return avl_search(root->right, data);
@@ -362,13 +363,16 @@ void avl_pre(avl_root root)
 {
   if (root != NULL)
   {
-    int l = 0, r = 0;
+    char *buffer_left = (char *) malloc(256 * sizeof(char));
+    char *buffer_right = (char *) malloc(256 * sizeof(char));
+    strcpy(buffer_left,"null");
+    strcpy(buffer_right,"null");
     if (root->left != NULL)
-      l = root->left->data->key;
+      strcpy(buffer_left,root->left->data->key);
     if (root->right != NULL)
-      r = root->right->data->key;
+      strcpy(buffer_right,root->right->data->key);
 
-    printf("%d, bf:%d, l:%d, r:%d\n", root->data->key, root->bf, l, r);
+    printf("%s, bf:%d, l:%s, r:%s\n", root->data->key, root->bf, buffer_left, buffer_right);
     avl_pre(root->left);
     avl_pre(root->right);
   }
@@ -378,15 +382,18 @@ void avl_pos(avl_root root)
 {
   if (root != NULL)
   {
-    int l = 0, r = 0;
+    char *buffer_left = (char *) malloc(256 * sizeof(char));
+    char *buffer_right = (char *) malloc(256 * sizeof(char));
+    strcpy(buffer_left,"null");
+    strcpy(buffer_right,"null");
     if (root->left != NULL)
-      l = root->left->data->key;
+      strcpy(buffer_left,root->left->data->key);
     if (root->right != NULL)
-      r = root->right->data->key;
+      strcpy(buffer_left,root->right->data->key);
 
-    avl_pos(root->left);
-    avl_pos(root->right);
-    printf("%d, bf:%d, l:%d, r:%d\n", root->data->key, root->bf, l, r);
+    avl_pre(root->left);
+    avl_pre(root->right);
+    printf("%s, bf:%d, l:%s, r:%s\n", root->data->key, root->bf, buffer_left, buffer_right);
 
   }
 }
@@ -395,14 +402,21 @@ void avl_in(avl_root root)
 {
   if (root != NULL)
   {
-    int l = 0, r = 0;
+    char *buffer_left = (char *) malloc(256 * sizeof(char));
+    char *buffer_right = (char *) malloc(256 * sizeof(char));
+    strcpy(buffer_left,"null");
+    strcpy(buffer_right,"null");
     if (root->left != NULL)
-      l = root->left->data->key;
+      strcpy(buffer_left,root->left->data->key);
     if (root->right != NULL)
-      r = root->right->data->key;
+      strcpy(buffer_left,root->right->data->key);
 
-    avl_in(root->left);
-    printf("%d, bf:%d, l:%d, r:%d\n", root->data->key, root->bf, l, r);
-    avl_in(root->right);
+    avl_pre(root->left);
+    printf("%s, bf:%d, l:%s, r:%s\n", root->data->key, root->bf, buffer_left, buffer_right);
+    avl_pre(root->right);
   }
 }
+
+void avl_remove_enter(char *string) {
+    string[strlen(string) -1] = '\0';
+}   
