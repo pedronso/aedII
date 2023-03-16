@@ -10,7 +10,7 @@ void init_avl(avl_root *root){
 avl_root avl_insert(avl_root root, char * data, int index, int *grown){
   if (root == NULL){
     avl_root new = (avl_root)malloc(sizeof(avl_node));
-    avl_Index* new_Index = (avl_Index*) malloc(sizeof(avl_Index*));
+    avl_Index* new_Index = (avl_Index*) malloc(sizeof(avl_Index));
     new->data = new_Index;
     strcpy(new->data->key, data);
     new->data->index = index;

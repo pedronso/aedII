@@ -22,16 +22,16 @@ int init_table(Table *table) {
 void insert_movie(Table *table, Movie *movie) {
     if(table->data_file != NULL) {
         bst_root bst_new = (bst_root) malloc(sizeof(bst_node));
-        bst_Index *bst_new_index = (bst_Index *) malloc(sizeof(bst_Index*));
+        bst_Index *bst_new_index = (bst_Index *) malloc(sizeof(bst_Index));
         bst_new_index->key = movie->code;
 
         avl_root avl_new = (avl_root) malloc(sizeof(avl_node));
-        avl_Index *avl_new_index = (avl_Index *) malloc(sizeof(avl_Index*));
+        avl_Index *avl_new_index = (avl_Index *) malloc(sizeof(avl_Index));
         strcpy(avl_new_index->key, movie->name);
 
         int growt = 0;
 
-        avp_Index *avp_new_index = (avp_Index *) malloc(sizeof(avp_Index*));
+        avp_Index *avp_new_index = (avp_Index *) malloc(sizeof(avp_Index));
         avp_new_index->key = movie->year;
 
         fseek(table->data_file, 0L, SEEK_END);

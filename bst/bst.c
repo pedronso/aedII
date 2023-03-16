@@ -9,7 +9,7 @@ void init_bst(bst_root *root){
 bst_root bst_insert(bst_root root, int data, int index){
   if(root == NULL){
     bst_root new = (bst_root) malloc(sizeof(bst_node));
-    bst_Index* new_Index = (bst_Index*) malloc(sizeof(bst_Index*));
+    bst_Index* new_Index = (bst_Index*) malloc(sizeof(bst_Index));
 
     new->data = new_Index;
 		new->data->key = data;

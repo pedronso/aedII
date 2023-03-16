@@ -28,7 +28,7 @@ void avp_insert(avp_root * root, int data, int index){
     }       
 
     new_root = (avp_root) malloc(sizeof(avp_node));
-    avp_Index* new_Index = (avp_Index*) malloc(sizeof(avp_Index*));
+    avp_Index* new_Index = (avp_Index*) malloc(sizeof(avp_Index));
     new_root->data = new_Index;
     new_root->data->key = data;
     new_root->data->index = index;
