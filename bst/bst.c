@@ -36,7 +36,7 @@ bst_root bst_remove(bst_root root, int data){
     if(root->left==NULL){
       bst_root temp = root->right;
       free(root);
-      printf("%d removido!\n",data);
+      printf("%d removido da BST!\n",data);
       return temp;  
     }
     if(root->right==NULL){
@@ -112,7 +112,7 @@ int bst_empty(bst_root root){
 
 void bst_pre(bst_root root){
   if(root != NULL){
-    printf("%d\n", root->data->key);
+    printf("data : %d\n", root->data->key);
     bst_pre(root->left);
     bst_pre(root->right);
   }

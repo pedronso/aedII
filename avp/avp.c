@@ -6,6 +6,12 @@ avp_root null_root;
 
 void init_avp(avp_root *root){
   *root = NULL;
+  null_root = (avp_root) malloc(sizeof(avp_node));
+	null_root->data = NULL;
+  null_root->left = NULL;
+  null_root->right = NULL;
+	null_root->color = DBLACK;
+  
 }
 
 void avp_insert(avp_root * root, int data, int index){
@@ -66,14 +72,15 @@ void fixup_insert(avp_root *root, avp_root new_root){
         }
         if (is_left(new_root)==0 && is_left(new_root->parent)){
             avp_double_right_rotation(root, new_root->parent->parent);
-            new_root->parent->color = BLACK;
-            new_root->parent->right->color = RED;
+            new_root->color = BLACK;
+            new_root->right->color = RED;
             continue;
         }
         if (is_left(new_root) && is_left(new_root->parent)==0){
             avp_double_left_rotation(root, new_root->parent->parent);
-            new_root->parent->color = BLACK;
-            new_root->parent->left->color = RED;
+            new_root->color = BLACK;
+            new_root->left->color = RED;
+            avp_pre(*root);
             continue;
         }
     }
