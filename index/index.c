@@ -89,7 +89,7 @@ Movie * bst_search_movie(Table *table, int key) {
                 Movie * movie = (Movie *) malloc(sizeof(Movie));
                 char *buffer = (char *) malloc(257 * sizeof(char));
                 fseek(table->data_file, temp->data->index, SEEK_SET);
-                // fgets(buffer, 256, table->data_file);
+                fgets(buffer, 256, table->data_file);
                 // printf("buffer: %s\n", buffer);
                 // fgets(buffer, 256, table->data_file);
                 // printf("buffer: %s\n", buffer);

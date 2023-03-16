@@ -73,7 +73,7 @@ avl_root avl_remove(avl_root root, char * data, int *shrink)
       avl_root temp = root->right;
       free(root);
       *shrink = 1;
-      printf("%d removido da AVL!\n",data);
+      printf("%s removido da AVL!\n",data);
       return temp;
     }
     if (root->right == NULL)
@@ -81,7 +81,7 @@ avl_root avl_remove(avl_root root, char * data, int *shrink)
       avl_root temp = root->left;
       free(root);
       *shrink = 1;
-      printf("%d removido da AVL!\n",data);
+      printf("%s removido da AVL!\n",data);
       return temp;
     }
     strcpy(root->data->key, avl_bigger_left(root->left));
