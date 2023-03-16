@@ -52,6 +52,7 @@ int main(int argc, char **argv){
             printf("\n");
             break;
         case 0:
+            printf("tchau");
             exit(0);
     }
 }
