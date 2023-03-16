@@ -10,3 +10,9 @@ DIRECTOR=pedronso
 YEAR=1
 RATING=1
 #
+CODE=1
+NAME=pedro pedro pedro
+DIRECTOR=pedronso pedronso aaaabb
+YEAR=1
+RATING=1
+#
