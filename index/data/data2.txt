@@ -1,0 +1,6 @@
+CODE=1
+NAME=pedro
+DIRECTOR=pedronso
+YEAR=1
+RATING=1
+#

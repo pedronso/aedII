@@ -6,7 +6,7 @@
 #include "../avl/avl.h"
 #include "../avp/avp.h"
 
-#define DATA_PATH "data/data.txt"
+#define DATA_PATH "data/data2.txt"
 #define BST_INDEX_PATH "data/bst_index.dat"
 #define AVL_INDEX_PATH "data/avl_index.dat"
 #define AVP_INDEX_PATH "data/avp_index.dat"
@@ -37,7 +37,7 @@ int init_table(Table *table);
 void insert_movie(Table *table, Movie *movie);
 void remove_movie(Table *table, int key);
 Movie * bst_search_movie(Table *table, int key);
-Movie * avl_search_movie(Table *table, int key);
+Movie * avl_search_movie(Table *table, char * key);
 Movie * avp_search_movie(Table *table, int key);
 void bst_order_search(Table *table, bst_root root);
 void retrieve_data(Table *table, bst_root root);

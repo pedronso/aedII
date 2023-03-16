@@ -18,7 +18,7 @@ int main(int argc, char ** argv) {
         printf("\n1- Inserir elemento\n2- Remover elemento\n3- Consultar na BST\n4- Consultar na AVL\n5- Consultar na AVP\n6- Pre-order (BST)\n7- Pre-order (AVL)\n8- Pre-order (AVP)\n9- Exibir registros em ordem (Code)\n0- Sair\n");
 		scanf("%d", &option);
         printf("\n");
-
+        fflush(stdin);
 		switch (option) {
             int valor;
             case 1:
@@ -43,9 +43,10 @@ int main(int argc, char ** argv) {
                     printf("Filme nao encontrado!\n");
                 break;
             case 4:
-                printf("Nota do filme: ");
-                scanf("%d", &key);
-                movie = avl_search_movie(&table, key);
+                printf("Nome do filme: ");
+                fgets(buffer, 255,  stdin);
+                remove_enter(buffer);
+                movie = avl_search_movie(&table, buffer);
                 if (movie != NULL) {
                     printf("\nCodigo: %d\n", movie->code);
                     printf("Nome: %s\n", movie->name);
