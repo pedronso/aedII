@@ -149,7 +149,7 @@ Movie * avl_search_movie(Table *table, char * key) {
                 printf("Encontrado na AVL no index %d!\n",temp->data->index);
                 return movie;
             } else {
-                if (key >= temp->data->key) {
+                if (strcmp(key, temp->data->key)>0) {
                     temp = temp->right;
                 } else {
                     temp = temp->left;                
