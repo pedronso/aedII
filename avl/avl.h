@@ -22,8 +22,7 @@ avl_root avl_insert(avl_root root, char * data, int index, int * grown);
 
 //remove
 avl_root avl_remove(avl_root root, char * data, int * shrink);
-// avl_root avl_remove_new(avl_root root, int data);
-char * avl_bigger_left(avl_root root);
+avl_Index * avl_bigger_left(avl_root root);
 
 //rotation
 avl_root rotate(avl_root root);

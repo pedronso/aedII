@@ -18,7 +18,7 @@ avl_root avl_insert(avl_root root, char * data, int index, int *grown){
     new->right = NULL;
     new->bf = 0;
     *grown = 1;
-    printf("%s inserido na AVL!\n",data);
+    printf("\n%s inserido na AVL!\n",data);
     return new;
   }
   else{
@@ -73,7 +73,7 @@ avl_root avl_remove(avl_root root, char * data, int *shrink)
       avl_root temp = root->right;
       free(root);
       *shrink = 1;
-      printf("%s removido da AVL!\n",data);
+      printf("\n%s removido da AVL!\n",data);
       return temp;
     }
     if (root->right == NULL)
@@ -81,10 +81,10 @@ avl_root avl_remove(avl_root root, char * data, int *shrink)
       avl_root temp = root->left;
       free(root);
       *shrink = 1;
-      printf("%s removido da AVL!\n",data);
+      printf("\n%s removido da AVL!\n",data);
       return temp;
     }
-    strcpy(root->data->key, avl_bigger_left(root->left));
+    root->data =  avl_bigger_left(root->left);
     root->left = avl_remove(root->left, root->data->key, shrink);
     *shrink = 1;
 
@@ -294,10 +294,10 @@ avl_root avl_double_right_rotation(avl_root root)
   return v;
 }
 
-char * avl_bigger_left(avl_root root)
+avl_Index * avl_bigger_left(avl_root root)
 {
   if (root->right == NULL)
-    return root->data->key;
+    return root->data;
   else
     return avl_bigger_left(root->right);
 }
@@ -372,7 +372,7 @@ void avl_pre(avl_root root)
     if (root->right != NULL)
       strcpy(buffer_right,root->right->data->key);
 
-    printf("%s, bf:%d, l:%s, r:%s\n", root->data->key, root->bf, buffer_left, buffer_right);
+    printf("data:%s, index:%d, bf:%d, left:%s, right:%s\n", root->data->key, root->data->index, root->bf, buffer_left, buffer_right);
     avl_pre(root->left);
     avl_pre(root->right);
   }
@@ -393,7 +393,8 @@ void avl_pos(avl_root root)
 
     avl_pre(root->left);
     avl_pre(root->right);
-    printf("%s, bf:%d, l:%s, r:%s\n", root->data->key, root->bf, buffer_left, buffer_right);
+    printf("data:%s, index:%d, bf:%d, left:%s, right:%s\n", root->data->key, root->data->index, root->bf, buffer_left, buffer_right);
+
 
   }
 }
@@ -412,7 +413,7 @@ void avl_in(avl_root root)
       strcpy(buffer_left,root->right->data->key);
 
     avl_pre(root->left);
-    printf("%s, bf:%d, l:%s, r:%s\n", root->data->key, root->bf, buffer_left, buffer_right);
+    printf("data:%s, index:%d, bf:%d, left:%s, right:%s\n", root->data->key, root->data->index, root->bf, buffer_left, buffer_right);
     avl_pre(root->right);
   }
 }

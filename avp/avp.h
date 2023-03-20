@@ -32,7 +32,7 @@ avp_root uncle(avp_root root);
 void avp_remove(avp_root * root, int data);
 void fixup_remove(avp_root *root, avp_root dblack);
 void remove_double_black(avp_root *root, avp_root node);
-int avp_bigger_left(avp_root root);
+avp_Index * avp_bigger_left(avp_root root);
 
 //rotation
 void avp_left_rotation(avp_root *root, avp_root pivot);

@@ -36,7 +36,7 @@ void insert_movie(Table *table, Movie *movie) {
 
         fseek(table->data_file, 0L, SEEK_END);
         avp_new_index->index = avl_new_index->index = bst_new_index->index = ftell(table->data_file);
-        printf("bst index: %d\navl index: %d\navp index: %d\n",bst_new_index->index,avl_new_index->index,avp_new_index->index);
+        // printf("bst index: %d\navl index: %d\navp index: %d\n",bst_new_index->index,avl_new_index->index,avp_new_index->index);
         
         fprintf(table->data_file, "CODE=%d\n", movie->code);
         fprintf(table->data_file, "NAME=%s\n", movie->name);

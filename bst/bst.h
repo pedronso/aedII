@@ -21,7 +21,7 @@ bst_root bst_insert(bst_root root, int data, int index);
 
 //remove
 bst_root bst_remove(bst_root root, int data);
-int bst_bigger_left(bst_root root);
+bst_Index * bst_bigger_left(bst_root root);
 
 //free
 void bst_free_root(bst_root *root);
