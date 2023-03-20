@@ -22,21 +22,21 @@ int init_table(Table *table) {
 void insert_movie(Table *table, Movie *movie) {
     if(table->data_file != NULL) {
         bst_root bst_new = (bst_root) malloc(sizeof(bst_node));
-        bst_Index *bst_new_index = (bst_Index *) malloc(sizeof(bst_Index*));
+        bst_Index *bst_new_index = (bst_Index *) malloc(sizeof(bst_Index));
         bst_new_index->key = movie->code;
 
         avl_root avl_new = (avl_root) malloc(sizeof(avl_node));
-        avl_Index *avl_new_index = (avl_Index *) malloc(sizeof(avl_Index*));
-        avl_new_index->key = movie->rating;
+        avl_Index *avl_new_index = (avl_Index *) malloc(sizeof(avl_Index));
+        strcpy(avl_new_index->key, movie->name);
 
         int growt = 0;
 
-        avp_Index *avp_new_index = (avp_Index *) malloc(sizeof(avp_Index*));
+        avp_Index *avp_new_index = (avp_Index *) malloc(sizeof(avp_Index));
         avp_new_index->key = movie->year;
 
         fseek(table->data_file, 0L, SEEK_END);
         avp_new_index->index = avl_new_index->index = bst_new_index->index = ftell(table->data_file);
-
+        // printf("bst index: %d\navl index: %d\navp index: %d\n",bst_new_index->index,avl_new_index->index,avp_new_index->index);
         
         fprintf(table->data_file, "CODE=%d\n", movie->code);
         fprintf(table->data_file, "NAME=%s\n", movie->name);
@@ -59,14 +59,6 @@ void insert_movie(Table *table, Movie *movie) {
 void remove_movie(Table * table, int key){
     int shrink = 0;
     Movie * movie = bst_search_movie(table, key);
-    // if (movie != NULL) {
-    //     printf("\nCode: %d\n", movie->code);
-    //     printf("Name: %s\n", movie->name);
-    //     printf("Director: %s\n", movie->director);
-    //     printf("Year: %d\n", movie->year);
-    //     printf("Rating: %d\n", movie->rating);
-    // } else
-    //     printf("Filme nao encontrado!\n");
 
     if (movie != NULL) {
         printf("\nFilme encontrado:\n");
@@ -79,7 +71,9 @@ void remove_movie(Table * table, int key){
         
 
         table->bst_index = bst_remove(table->bst_index, key);
-        table->avl_index = avl_remove(table->avl_index, movie->rating, &shrink);
+        table->avl_index = avl_remove(table->avl_index, movie->name, &shrink);
+        //alguma coisa acontece ao trocar o root da avp
+        //problema so acontece quando tem 2 valores e a raiz eh removida
         avp_remove(&table->avp_index, movie->year);
     } else
         printf("\nFilme nao encontrado!\n");
@@ -93,9 +87,18 @@ Movie * bst_search_movie(Table *table, int key) {
         while (temp != NULL) {
             if (temp->data->key == key) {
                 Movie * movie = (Movie *) malloc(sizeof(Movie));
-                char *buffer = (char *) malloc(256 * sizeof(char));
+                char *buffer = (char *) malloc(257 * sizeof(char));
                 fseek(table->data_file, temp->data->index, SEEK_SET);
                 fgets(buffer, 256, table->data_file);
+                // printf("buffer: %s\n", buffer);
+                // fgets(buffer, 256, table->data_file);
+                // printf("buffer: %s\n", buffer);
+                // fgets(buffer, 256, table->data_file);
+                // printf("buffer: %s\n", buffer);
+                // fgets(buffer, 256, table->data_file);
+                // printf("buffer: %s\n", buffer);
+                // fgets(buffer, 256, table->data_file);
+                // printf("buffer: %s\n", buffer);
                 if (strcmp(buffer, "#\n") != 0) {
                     movie->code = atoi(select_field(buffer));
                     fgets(buffer, 256, table->data_file);
@@ -108,6 +111,7 @@ Movie * bst_search_movie(Table *table, int key) {
                     movie->rating = atoi(select_field(buffer));
                 }
                 free(buffer);
+                printf("Encontrado na BST no index %d!\n",temp->data->index);
                 return movie;
             } else {
                 if (key >= temp->data->key) {
@@ -121,11 +125,11 @@ Movie * bst_search_movie(Table *table, int key) {
     return NULL;
 }
 
-Movie * avl_search_movie(Table *table, int key) {
+Movie * avl_search_movie(Table *table, char * key) {
     if (table->data_file != NULL) {
         avl_root temp = table->avl_index;
         while (temp != NULL) {
-            if (temp->data->key == key) {
+            if (strcmp(temp->data->key, key)==0) {
                 Movie * movie = (Movie *) malloc(sizeof(Movie));
                 char *buffer = (char *) malloc(256 * sizeof(char));
                 fseek(table->data_file, temp->data->index, SEEK_SET);
@@ -142,9 +146,10 @@ Movie * avl_search_movie(Table *table, int key) {
                     movie->rating = atoi(select_field(buffer));
                 }
                 free(buffer);
+                printf("Encontrado na AVL no index %d!\n",temp->data->index);
                 return movie;
             } else {
-                if (key >= temp->data->key) {
+                if (strcmp(key, temp->data->key)>0) {
                     temp = temp->right;
                 } else {
                     temp = temp->left;                
@@ -176,6 +181,7 @@ Movie * avp_search_movie(Table *table, int key) {
                     movie->rating = atoi(select_field(buffer));
                 }
                 free(buffer);
+                printf("Encontrado na AVP no index %d!\n",temp->data->index);
                 return movie;
             } else {
                 if (key >= temp->data->key) {
@@ -369,11 +375,19 @@ void finish(Table *table) {
 char * select_field(char *string) {
     int i = 0, j, k;
     char *value = (char *) malloc(256 * sizeof(char));
-    while (string[i] != '=' && string[i] != '\0')
+    while (string[i] != '=' && string[i] != '\0'){
+        // printf("i: '%c'\n",string[i]);
         i++;
-    for (j = i + 1, k = 0; j < strlen(string) - 1; j++, k++)
+    }
+    for (j = i + 1, k = 0; j < strlen(string) - 1; j++, k++){
+        // printf("value i: '%c'\n",value[k]);
         value[k] = string[j];
+    }
+    if (value[k]!='\0')
+    {
     value[k]='\0';
+    }
+    
     return value;
 }
 

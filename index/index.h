@@ -37,7 +37,7 @@ int init_table(Table *table);
 void insert_movie(Table *table, Movie *movie);
 void remove_movie(Table *table, int key);
 Movie * bst_search_movie(Table *table, int key);
-Movie * avl_search_movie(Table *table, int key);
+Movie * avl_search_movie(Table *table, char * key);
 Movie * avp_search_movie(Table *table, int key);
 void bst_order_search(Table *table, bst_root root);
 void retrieve_data(Table *table, bst_root root);

@@ -15,28 +15,35 @@ int main(int argc, char **argv){
   while (1) {
     printf("1- Inserir elemento\n2- Remover elemento\n3- Consultar elemento\n4- Preorder\n5- Inorder\n6- Posorder\n0- Sair\n");
     scanf("%d", &input);
+    fflush(stdin);
+    char *buffer = (char *) malloc(256 * sizeof(char));
 
     switch (input) {
-        int data;
         case 1:
             printf("Valor a ser inserido: ");
-            scanf("%d", &data);
-            root = avl_insert(root, data, 0, &growt);
+            fgets(buffer, 255,  stdin);
+        	avl_remove_enter(buffer);
+            root = avl_insert(root, buffer, 0, &growt);
+            free(buffer);
             break;
         case 2:
             printf("Valor a ser removido: ");
-            scanf("%d", &data);
-            root = avl_remove(root, data, &shrunk);;
+            fgets(buffer, 255,  stdin);
+        	avl_remove_enter(buffer);
+            root = avl_remove(root, buffer, &shrunk);
+            free(buffer);
             break;
         case 3:
             printf("Valor a ser consultado: ");
-            scanf("%d", &data);
-            avl_root query = avl_search(root, data);
+            fgets(buffer, 255,  stdin);
+        	avl_remove_enter(buffer);
+            avl_root query = avl_search(root, buffer);
             if(query==NULL)
                 printf("Valor não existe\n");
             else
-            printf("Valor existe, %d\n", query->data->key);
+            printf("Valor existe, %s\n", query->data->key);
             printf("\n");
+            free(buffer);
             break;
         case 4:
             avl_pre(root);

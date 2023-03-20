@@ -9,7 +9,7 @@ void init_bst(bst_root *root){
 bst_root bst_insert(bst_root root, int data, int index){
   if(root == NULL){
     bst_root new = (bst_root) malloc(sizeof(bst_node));
-    bst_Index* new_Index = (bst_Index*) malloc(sizeof(bst_Index*));
+    bst_Index* new_Index = (bst_Index*) malloc(sizeof(bst_Index));
 
     new->data = new_Index;
 		new->data->key = data;
@@ -17,7 +17,7 @@ bst_root bst_insert(bst_root root, int data, int index){
 
 		new->left = NULL;
 		new->right = NULL;
-    printf("%d inserido na BST!\n",data);
+    printf("\n%d inserido na BST!\n",data);
 		return new;
   }else{
     if(data < root->data->key) {
@@ -36,16 +36,16 @@ bst_root bst_remove(bst_root root, int data){
     if(root->left==NULL){
       bst_root temp = root->right;
       free(root);
-      printf("%d removido da BST!\n",data);
+      printf("\n%d removido da BST!\n",data);
       return temp;  
     }
     if(root->right==NULL){
       bst_root temp = root->left;
       free(root);
-      printf("%d removido da BST!\n",data);
+      printf("\n%d removido da BST!\n",data);
       return temp;  
     }
-    root->data->key=bst_bigger_left(root->left);
+    root->data = bst_bigger_left(root->left);
     root->left=bst_remove(root->left,root->data->key);
     return root;
   }
@@ -58,9 +58,9 @@ bst_root bst_remove(bst_root root, int data){
   
 }
 
-int bst_bigger_left(bst_root root) {
+bst_Index* bst_bigger_left(bst_root root) {
 	if(root->right == NULL)
-			return root->data->key;
+			return root->data;
 	else
 			return bst_bigger_left(root->right);
 }
@@ -112,7 +112,16 @@ int bst_empty(bst_root root){
 
 void bst_pre(bst_root root){
   if(root != NULL){
-    printf("data : %d\n", root->data->key);
+    int l = 0, r = 0;
+    if (root->left != NULL)
+    {
+      l = root->left->data->key;
+    }
+    if (root->right != NULL)
+    {
+      r = root->right->data->key;
+    }
+    printf("data:%d, index:%d, left:%d, right:%d\n", root->data->key, root->data->index, l, r);
     bst_pre(root->left);
     bst_pre(root->right);
   }
@@ -120,16 +129,34 @@ void bst_pre(bst_root root){
 
 void bst_pos(bst_root root){
   if(root != NULL){
+        int l = 0, r = 0;
+    if (root->left != NULL)
+    {
+      l = root->left->data->key;
+    }
+    if (root->right != NULL)
+    {
+      r = root->right->data->key;
+    }
     bst_pos(root->left);
     bst_pos(root->right);
-    printf("%d\n", root->data->key);
+    printf("data:%d, index:%d, left:%d, right:%d\n", root->data->key, root->data->index, l, r);
   }
 }
 
 void bst_in(bst_root root){
+      int l = 0, r = 0;
+    if (root->left != NULL)
+    {
+      l = root->left->data->key;
+    }
+    if (root->right != NULL)
+    {
+      r = root->right->data->key;
+    }
   if(root != NULL){
     bst_in(root->left);
-    printf("%d\n", root->data->key);
+    printf("data:%d, index:%d, left:%d, right:%d\n", root->data->key, root->data->index, l, r);
     bst_in(root->right);
   }
 }

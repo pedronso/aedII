@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "avp.h"
-
+#include <string.h>
 avp_root null_root;
 
 void init_avp(avp_root *root){
@@ -28,7 +28,7 @@ void avp_insert(avp_root * root, int data, int index){
     }       
 
     new_root = (avp_root) malloc(sizeof(avp_node));
-    avp_Index* new_Index = (avp_Index*) malloc(sizeof(avp_Index*));
+    avp_Index* new_Index = (avp_Index*) malloc(sizeof(avp_Index));
     new_root->data = new_Index;
     new_root->data->key = data;
     new_root->data->index = index;
@@ -45,7 +45,7 @@ void avp_insert(avp_root * root, int data, int index){
         else
             parent->right=new_root;
     }
-    printf("%d inserido na AVP!\n",data);
+    printf("\n%d inserido na AVP!\n",data);
     fixup_insert(root,new_root);
 }
 
@@ -121,27 +121,27 @@ void avp_remove(avp_root *root, int data)
 	while (temp != NULL) {
 		if (data == temp->data->key) {
       if (temp->left != NULL && temp->right != NULL) {
-    		temp->data->key = avp_bigger_left(temp->left);
+    		temp->data = avp_bigger_left(temp->left);
 	    	avp_remove(&(temp->left),temp->data->key);
-        printf("%d removido da AVP!\n",data);
+        printf("\n%d removido da AVP!\n",data);
         break;
       }
 
 			if (temp->left == NULL && temp->right != NULL) {
         avp_root right = temp->right;
-        temp->data->key = right->data->key;
+        temp->data = right->data;
         temp->right = NULL;
         free(right);
-        printf("%d removido da AVP!\n",data);
+        printf("\n%d removido da AVP!\n",data);
 				break;
 			}
 
 			if (temp->left != NULL && temp->right == NULL) {
 				avp_root left = temp->left;
-        temp->data->key = left->data->key;
+        temp->data = left->data;
         temp->left = NULL;
         free(left);
-        printf("%d removido da AVP!\n",data);
+        printf("\n%d removido da AVP!\n",data);
         break;
 			}
 
@@ -149,7 +149,7 @@ void avp_remove(avp_root *root, int data)
 				if (is_root(temp)) {
 					*root = NULL;
           free(temp);
-          printf("%d removido da AVP!\n",data);
+          printf("\n%d removido da AVP!\n",data);
 					break;
 				}
 
@@ -159,7 +159,7 @@ void avp_remove(avp_root *root, int data)
           else
 					  temp->parent->right = NULL;
           free(temp);
-          printf("%d removido da AVP!\n",data);
+          printf("\n%d removido da AVP!\n",data);
 					break;
 				} else {
           null_root->parent = temp->parent;
@@ -168,7 +168,7 @@ void avp_remove(avp_root *root, int data)
           else
             temp->parent->right = null_root;
           free(temp);
-          printf("%d removido da AVP!\n",data);
+          printf("\n%d removido da AVP!\n",data);
           fixup_remove(root, null_root);
           break;
 				}
@@ -333,10 +333,10 @@ void avp_double_right_rotation(avp_root *root, avp_root pivot)
     avp_right_rotation(root, pivot);
 }
 
-int avp_bigger_left(avp_root root)
+avp_Index * avp_bigger_left(avp_root root)
 {
   if (root->right == NULL)
-    return root->data->key;
+    return root->data;
   else
     return avp_bigger_left(root->right);
 }
@@ -400,21 +400,12 @@ int avp_empty(avp_root root)
   return (root == NULL);
 }
 
-// void avp_pre(avp_root root)
-// {
-//   if (root != NULL)
-//   {
-//     printf("%d, fb:%d\n", root->data->key, root->bf);
-//     avp_pre(root->left);
-//     avp_pre(root->right);
-//   }
-// }
-
 void avp_pre(avp_root root)
 {
   if (root != NULL)
   {
     int l = 0, r = 0;
+    char * color;
     if (root->left != NULL)
     {
       l = root->left->data->key;
@@ -423,8 +414,12 @@ void avp_pre(avp_root root)
     {
       r = root->right->data->key;
     }
+    if(root->color==0)
+      strcpy(color, "red");
+    else  
+      strcpy(color, "black");
 
-    printf("%d, color:%d, left:%d, right:%d\n", root->data->key, root->color, l, r);
+    printf("data:%d, index:%d, color:%s, left:%d, right:%d\n", root->data->key, root->data->index, color, l, r);
     avp_pre(root->left);
     avp_pre(root->right);
   }
@@ -446,7 +441,8 @@ void avp_pos(avp_root root)
 
     avp_pos(root->left);
     avp_pos(root->right);
-    printf("%d, color:%d, left:%d, right:%d\n", root->data->key, root->color, l, r);
+    printf("data:%d, index:%d, color:%d, left:%d, right:%d\n", root->data->key, root->data->index, root->color, l, r);
+
   }
 }
 
@@ -464,7 +460,7 @@ void avp_in(avp_root root)
       r = root->right->data->key;
     }
     avp_in(root->left);
-    printf("%d, color:%d, left:%d, right:%d\n", root->data->key, root->color, l, r);
+    printf("data:%d, index:%d, color:%d, left:%d, right:%d\n", root->data->key, root->data->index, root->color, l, r);
     avp_in(root->right);
   }
 }

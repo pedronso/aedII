@@ -2,7 +2,7 @@
 #define AVL_H
 
 typedef struct avl_index {
-	int key;
+	char key [25];
 	int index;
 } avl_Index;
 
@@ -18,12 +18,11 @@ typedef struct avl_node * avl_root;
 void init_avl(avl_root *root);
 
 //insert
-avl_root avl_insert(avl_root root, int data, int index, int * grown);
+avl_root avl_insert(avl_root root, char * data, int index, int * grown);
 
 //remove
-avl_root avl_remove(avl_root root, int data, int * shrink);
-// avl_root avl_remove_new(avl_root root, int data);
-int avl_bigger_left(avl_root root);
+avl_root avl_remove(avl_root root, char * data, int * shrink);
+avl_Index * avl_bigger_left(avl_root root);
 
 //rotation
 avl_root rotate(avl_root root);
@@ -36,7 +35,7 @@ avl_root avl_double_right_rotation(avl_root root);
 void avl_free_root(avl_root *root);
 
 //query
-avl_root avl_search(avl_root root, int data);
+avl_root avl_search(avl_root root, char * data);
 
 //avl info
 int avl_qtd(avl_root root);
@@ -50,5 +49,8 @@ void avl_pre(avl_root root);
 void avl_pre_new(avl_root root);
 void avl_pos(avl_root root);
 void avl_in(avl_root root);
+
+void avl_remove_enter(char *string);
+
 
 #endif
