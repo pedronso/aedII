@@ -47,7 +47,7 @@ int main(int argc, char ** argv) {
                 printf("Nome do filme: ");
                 fgets(buffer, 255,  stdin);
                 remove_enter(buffer);
-                printf("buffer: _%s_\n",buffer);
+                // printf("buffer: _%s_\n",buffer);
                 movie = avl_search_movie(&table, buffer);
                 if (movie != NULL) {
                     printf("\nCodigo: %d\n", movie->code);

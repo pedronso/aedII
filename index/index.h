@@ -6,10 +6,10 @@
 #include "../avl/avl.h"
 #include "../avp/avp.h"
 
-#define DATA_PATH "data/data3.txt"
-#define BST_INDEX_PATH "data/bst_index2.dat"
-#define AVL_INDEX_PATH "data/avl_index2.dat"
-#define AVP_INDEX_PATH "data/avp_index2.dat"
+#define DATA_PATH "data/data.txt"
+#define BST_INDEX_PATH "data/bst_index.dat"
+#define AVL_INDEX_PATH "data/avl_index.dat"
+#define AVP_INDEX_PATH "data/avp_index.dat"
 
 
 

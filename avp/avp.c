@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "avp.h"
-
+#include <string.h>
 avp_root null_root;
 
 void init_avp(avp_root *root){
@@ -405,6 +405,7 @@ void avp_pre(avp_root root)
   if (root != NULL)
   {
     int l = 0, r = 0;
+    char * color;
     if (root->left != NULL)
     {
       l = root->left->data->key;
@@ -413,8 +414,12 @@ void avp_pre(avp_root root)
     {
       r = root->right->data->key;
     }
+    if(root->color==0)
+      strcpy(color, "red");
+    else  
+      strcpy(color, "black");
 
-    printf("data:%d, index:%d, color:%d, left:%d, right:%d\n", root->data->key, root->data->index, root->color, l, r);
+    printf("data:%d, index:%d, color:%s, left:%d, right:%d\n", root->data->key, root->data->index, color, l, r);
     avp_pre(root->left);
     avp_pre(root->right);
   }
