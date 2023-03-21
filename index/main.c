@@ -18,8 +18,8 @@ int main(int argc, char ** argv) {
         printf("\n1- Inserir elemento\n2- Remover elemento\n3- Consultar na BST\n4- Consultar na AVL\n5- Consultar na AVP\n6- Pre-order (BST)\n7- Pre-order (AVL)\n8- Pre-order (AVP)\n9- Exibir registros em ordem\n0- Sair\n");
 		scanf("%d", &option);
         printf("\n");
-        // getchar();
-        fflush(stdin);
+        getchar();
+        //fflush(stdin);
 		switch (option) {
             int valor;
             case 1:

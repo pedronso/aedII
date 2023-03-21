@@ -1,0 +1,18 @@
+CODE=1
+NAME=Titanic
+DIRECTOR=James Cameron
+YEAR=1998
+RATING=9
+#
+CODE=0
+NAME=vatar
+DIRECTOR=James Cameron
+YEAR=2009
+RATING=8
+#
+CODE=3
+NAME=O Poderoso Chefao
+DIRECTOR=Francis Ford Coppola
+YEAR=1972
+RATING=10
+#
