@@ -36,7 +36,6 @@ void insert_movie(Table *table, Movie *movie) {
 
         fseek(table->data_file, 0L, SEEK_END);
         avp_new_index->index = avl_new_index->index = bst_new_index->index = ftell(table->data_file);
-        // printf("bst index: %d\navl index: %d\navp index: %d\n",bst_new_index->index,avl_new_index->index,avp_new_index->index);
         
         fprintf(table->data_file, "CODE=%d\n", movie->code);
         fprintf(table->data_file, "NAME=%s\n", movie->name);
@@ -72,8 +71,6 @@ void remove_movie(Table * table, int key){
 
         table->bst_index = bst_remove(table->bst_index, key);
         table->avl_index = avl_remove(table->avl_index, movie->name, &shrink);
-        //alguma coisa acontece ao trocar o root da avp
-        //problema so acontece quando tem 2 valores e a raiz eh removida
         avp_remove(&table->avp_index, movie->year);
     } else
         printf("\nFilme nao encontrado!\n");
@@ -90,15 +87,6 @@ Movie * bst_search_movie(Table *table, int key) {
                 char *buffer = (char *) malloc(257 * sizeof(char));
                 fseek(table->data_file, temp->data->index, SEEK_SET);
                 fgets(buffer, 256, table->data_file);
-                // printf("buffer: %s\n", buffer);
-                // fgets(buffer, 256, table->data_file);
-                // printf("buffer: %s\n", buffer);
-                // fgets(buffer, 256, table->data_file);
-                // printf("buffer: %s\n", buffer);
-                // fgets(buffer, 256, table->data_file);
-                // printf("buffer: %s\n", buffer);
-                // fgets(buffer, 256, table->data_file);
-                // printf("buffer: %s\n", buffer);
                 if (strcmp(buffer, "#\n") != 0) {
                     movie->code = atoi(select_field(buffer));
                     fgets(buffer, 256, table->data_file);
@@ -376,11 +364,9 @@ char * select_field(char *string) {
     int i = 0, j, k;
     char *value = (char *) malloc(256 * sizeof(char));
     while (string[i] != '=' && string[i] != '\0'){
-        // printf("i: '%c'\n",string[i]);
         i++;
     }
     for (j = i + 1, k = 0; j < strlen(string) - 1; j++, k++){
-        // printf("value i: '%c'\n",value[k]);
         value[k] = string[j];
     }
     if (value[k]!='\0')

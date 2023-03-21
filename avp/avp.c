@@ -80,7 +80,6 @@ void fixup_insert(avp_root *root, avp_root new_root){
             avp_double_left_rotation(root, new_root->parent->parent);
             new_root->color = BLACK;
             new_root->left->color = RED;
-            avp_pre(*root);
             continue;
         }
     }

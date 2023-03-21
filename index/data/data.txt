@@ -1,6 +1,0 @@
-CODE=1
-NAME=filme generico
-DIRECTOR=diretor generico
-YEAR=2010
-RATING=9
-#

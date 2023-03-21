@@ -1,158 +1,97 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include "index.h"
 
-#include "../bst/bst.h"
-#include "../avl/avl.h"
-#include "../avp/avp.h"
+int main(int argc, char ** argv) {
+    Table table;
+    Movie *movie;
+	int option, key;
+    float rating;
+    char *buffer = (char *) malloc(256 * sizeof(char));
 
-
-int main(int argc, char **argv)
-{
-  bst_root bst_root_main;
-  avl_root avl_root_main;
-  avp_root avp_root_main;
-  
-  int growt = 0;
-  int shrunk = 0;
-    
-  int input;
-
-  init_bst(&bst_root_main);
-  init_avl(&avl_root_main);
-  init_avp(&avp_root_main);
-
-
-  while (1) {
-    printf("BST - \n");
-    printf("1- Inserir elemento\n2- Remover elemento\n3- Consultar elemento\n4- Preorder\n5- Inorder\n6- Posorder\n");
-    printf("AVL - \n");
-    printf("7- Inserir elemento\n8- Remover elemento\n9- Consultar elemento\n10- Preorder\n11- Inorder\n12- Posorder\n");
-    printf("AVP - \n");
-    printf("13- Inserir elemento\n14- Remover elemento\n15- Consultar elemento\n16- Preorder\n17- Inorder\n18- Posorder\n0- Sair\n");
-
-    printf("\n");
-    scanf("%d", &input);
-    printf("\n");
-
-    switch (input) {
-      int data;
-      case 1:
-        printf("Valor a ser inserido: ");
-        scanf("%d", &data);
-        bst_root_main = bst_insert(bst_root_main, data, 0);
-        break;
-      case 2:
-        printf("Valor a ser removido: ");
-        scanf("%d", &data);
-        bst_root_main = bst_remove(bst_root_main, data);;
-        break;
-      case 3:
-        printf("Valor a ser consultado: ");
-        scanf("%d", &data);
-        bst_root bst_query = bst_search(bst_root_main, data);
-        if(bst_query==NULL)
-          printf("Valor não existe\n");
-        else
-          printf("Valor existe, %d\n", bst_query->data->key);
-        printf("\n");
-        break;
-      case 4:
-        bst_pre(bst_root_main);
-        printf("Altura: %d\n", bst_height(bst_root_main));
-        printf("Qtd: %d\n", bst_qtd(bst_root_main));
-        printf("\n");
-        break;
-      case 5:
-        bst_in(bst_root_main);
-        printf("altura: %d\n", bst_height(bst_root_main));
-        printf("qtd: %d\n", bst_qtd(bst_root_main));
-        printf("\n");
-        break;
-      case 6:
-        bst_pos(bst_root_main);
-        printf("altura: %d\n", bst_height(bst_root_main));
-        printf("qtd: %d\n", bst_qtd(bst_root_main));
-        printf("\n");
-        break;
-      case 7:
-        printf("Valor a ser inserido: ");
-        scanf("%d", &data);
-        avl_root_main = avl_insert(avl_root_main, data, 0, &growt);
-        break;
-      case 8:
-        printf("Valor a ser removido: ");
-        scanf("%d", &data);
-        avl_root_main = avl_remove(avl_root_main, data, &shrunk);;
-        break;
-      case 9:
-        printf("Valor a ser consultado: ");
-        scanf("%d", &data);
-        avl_root avl_query = avl_search(avl_root_main, data);
-        if(avl_query==NULL)
-            printf("Valor não existe\n");
-        else
-        printf("Valor existe, %d\n", avl_query->data->key);
-        printf("\n");
-        break;
-      case 10:
-        avl_pre(avl_root_main);
-        printf("Altura: %d\n", avl_height(avl_root_main));
-        printf("Qtd: %d\n", avl_qtd(avl_root_main));
-        printf("\n");
-        break;
-      case 11:
-        avl_in(avl_root_main);
-        printf("altura: %d\n", avl_height(avl_root_main));
-        printf("qtd: %d\n", avl_qtd(avl_root_main));
-        printf("\n");
-        break;
-      case 12:
-        avl_pos(avl_root_main);
-        printf("altura: %d\n", avl_height(avl_root_main));
-        printf("qtd: %d\n", avl_qtd(avl_root_main));
-        printf("\n");
-        break;
-      case 13:
-        printf("Valor a ser inserido: ");
-        scanf("%d", &data);
-        avp_insert(&avp_root_main, data, 0);
-        break;
-      case 14:
-        printf("Valor a ser removido: ");
-        scanf("%d", &data);
-        avp_remove(&avp_root_main, data);
-        break;
-      case 15:
-        printf("Valor a ser consultado: ");
-        scanf("%d", &data);
-        avp_root avp_query = avp_search(avp_root_main, data);
-        if(avp_query==NULL)
-            printf("Valor não existe\n");
-        else
-        printf("Valor existe, %d\n", avp_query->data->key);
-        printf("\n");
-        break;
-      case 16:
-        avp_pre(avp_root_main);
-        printf("Altura: %d\n", avp_height(avp_root_main));
-        printf("Qtd: %d\n", avp_qtd(avp_root_main));
-        printf("\n");
-        break;
-      case 17:
-        avp_in(avp_root_main);
-        printf("altura: %d\n", avp_height(avp_root_main));
-        printf("qtd: %d\n", avp_qtd(avp_root_main));
-        printf("\n");
-        break;
-      case 18 :
-        avp_pos(avp_root_main);
-        printf("altura: %d\n", avp_height(avp_root_main));
-        printf("qtd: %d\n", avp_qtd(avp_root_main));
-        printf("\n");
-        break;    
-      case 0:
+	if (!init_table(&table)) {
+        printf("Erro ao carregar tabela de dados.");
         exit(0);
     }
-  }
 
+	while (1) {
+        printf("\n1- Inserir elemento\n2- Remover elemento\n3- Consultar na BST\n4- Consultar na AVL\n5- Consultar na AVP\n6- Pre-order (BST)\n7- Pre-order (AVL)\n8- Pre-order (AVP)\n9- Exibir registros em ordem\n0- Sair\n");
+		scanf("%d", &option);
+        printf("\n");
+        // getchar();
+        fflush(stdin);
+		switch (option) {
+            int valor;
+            case 1:
+                insert_movie(&table, input_aux());
+                break;
+            case 2:
+                printf("Codigo do filme: ");
+                scanf("%d", &key);
+                remove_movie(&table, key);
+                break;    
+            case 3:
+                printf("Codigo do filme: ");
+                scanf("%d", &key);
+                movie = bst_search_movie(&table, key);
+                if (movie != NULL) {
+                    printf("\nCodigo: %d\n", movie->code);
+                    printf("Nome: %s\n", movie->name);
+                    printf("Diretor: %s\n", movie->director);
+                    printf("Ano: %d\n", movie->year);
+                    printf("Nota: %d\n", movie->rating);
+                } else
+                    printf("Filme nao encontrado!\n");
+                break;
+            case 4:
+                printf("Nome do filme: ");
+                fgets(buffer, 255,  stdin);
+                remove_enter(buffer);
+                // printf("buffer: _%s_\n",buffer);
+                movie = avl_search_movie(&table, buffer);
+                if (movie != NULL) {
+                    printf("\nCodigo: %d\n", movie->code);
+                    printf("Nome: %s\n", movie->name);
+                    printf("Diretor: %s\n", movie->director);
+                    printf("Ano: %d\n", movie->year);
+                    printf("Nota: %d\n", movie->rating);
+                } else
+                    printf("Filme nao encontrado!\n");
+                break;
+            case 5:
+                printf("Ano do filme: ");
+                scanf("%d", &key);
+                movie = avp_search_movie(&table, key);
+                if (movie != NULL) {
+                    printf("\nCodigo: %d\n", movie->code);
+                    printf("Nome: %s\n", movie->name);
+                    printf("Diretor: %s\n", movie->director);
+                    printf("Ano: %d\n", movie->year);
+                    printf("Nota: %d\n", movie->rating);
+                } else
+                    printf("Filme nao encontrado!\n");
+                break;    
+            case 6:
+                bst_pre(table.bst_index);
+                printf("\n");
+                break;
+            case 7:
+                avl_pre(table.avl_index);
+                printf("\n");
+                break;
+            case 8:
+                avp_pre(table.avp_index);
+                printf("\n");
+                break;
+            case 9:
+                bst_order_search(&table, table.bst_index);
+                printf("\n");
+                break;
+            case 0:
+                finish(&table);
+                exit(0);
+		}
+	}
+
+    return 0;
 }
